@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { Button } from '@/components/ui/button';
-import RiskBadge from './blocks/RiskBadge';
+import HeroMetricStrip from './blocks/HeroMetricStrip';
 import ScenarioCards from './blocks/ScenarioCards';
 import MonteCarloCallout from './blocks/MonteCarloCallout';
 import ComponentBreakdown from './blocks/ComponentBreakdown';
@@ -24,19 +24,21 @@ interface ResultsPanelProps {
   inputs: SimulationInputs;
 }
 
-function SectionCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+/** Dark card container for result blocks */
+function DataCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-white border border-slate-200 rounded-xl p-5 shadow-sm ${className}`}>
+    <div className={`bg-[#111E35] border border-[#1E3A5F] rounded-lg p-5 ${className}`}>
       {children}
     </div>
   );
 }
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
+/** Section label with flanking rules — McKinsey brief section markers */
+function SectionDivider({ label }: { label: string }) {
   return (
-    <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">
-      {children}
-    </p>
+    <div className="slvr-section-divider">
+      <span className="text-label whitespace-nowrap">{label}</span>
+    </div>
   );
 }
 
@@ -51,44 +53,47 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
   return (
     <div className="p-6 space-y-5">
 
-      {/* Header row with status + PDF button */}
+      {/* ── Status bar ── */}
       <div className="flex items-center justify-between gap-4">
-        <div>
-          <h2 className="text-sm font-semibold text-slate-700">Risk Assessment Results</h2>
-          {isRunning ? (
-            <p className="text-xs text-slate-400 mt-0.5 animate-pulse">
-              Running 5,000 simulations...
-            </p>
-          ) : (
-            <p className="text-xs text-slate-400 mt-0.5">
-              {result ? '5,000 simulations complete' : 'Initializing...'}
-            </p>
-          )}
+        <div className="flex items-center gap-2">
+          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+            isRunning ? 'bg-[#C4A55A] animate-pulse' : result ? 'bg-[#2DD4BF]' : 'bg-[#1E3A5F]'
+          }`} />
+          <p className="font-mono text-[11px] text-[#6B7FA3] uppercase tracking-widest">
+            {isRunning
+              ? 'Computing 5,000 scenarios...'
+              : result
+                ? '5,000 simulations complete'
+                : 'Initializing...'}
+          </p>
         </div>
         <Button
           variant="outline"
           size="sm"
           onClick={() => handlePrint()}
           disabled={!result || isRunning}
-          className="text-xs shrink-0"
+          className="text-[11px] shrink-0 border-[#1E3A5F] text-[#6B7FA3] hover:text-[#E8EDF5]
+            hover:border-[#C4A55A]/50 hover:bg-[#162040] transition-colors uppercase tracking-wide"
         >
-          <svg className="w-3.5 h-3.5 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg className="w-3 h-3 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
               d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          Download Risk Report
+          Risk Report
         </Button>
       </div>
 
-      {/* Block 1: Risk Badge */}
-      <RiskBadge
-        riskLevel={result?.riskLevel ?? null}
-        role={inputs.role}
-      />
+      {/* ════════════════════════════════════════════════
+          SECTION 1 — EXECUTIVE RISK SUMMARY
+      ════════════════════════════════════════════════ */}
+      <SectionDivider label="Executive Risk Summary" />
 
-      {/* Block 2: Scenario Cards */}
+      {/* Hero metric — P50 daily cost, risk level, total exposure */}
+      <HeroMetricStrip result={result} isRunning={isRunning} daysVacant={inputs.daysVacant} />
+
+      {/* P10 / P50 / P90 scenario cards */}
       <div>
-        <SectionTitle>Scenario Comparison</SectionTitle>
+        <p className="text-label mb-3">Scenario Comparison · No Breach vs. Breach During Vacancy</p>
         <ScenarioCards
           result={result}
           isRunning={isRunning}
@@ -96,55 +101,58 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
         />
       </div>
 
-      {/* Block 3: Monte Carlo Callout */}
+      {/* ════════════════════════════════════════════════
+          SECTION 2 — RISK DECOMPOSITION
+      ════════════════════════════════════════════════ */}
+      <SectionDivider label="Risk Decomposition" />
+
+      {/* Monte Carlo context — compressed to a single callout line */}
       <MonteCarloCallout result={result} />
 
-      {/* Block 4: Component Breakdown */}
-      <SectionCard>
-        <SectionTitle>Cost Component Breakdown</SectionTitle>
+      {/* Component breakdown */}
+      <DataCard>
+        <p className="text-label mb-4">Cost Component Breakdown · Daily Mean (No-Breach Scenario)</p>
         <ComponentBreakdown result={result} role={inputs.role} />
-      </SectionCard>
+      </DataCard>
 
-      {/* Block 5: Cumulative Cost Chart */}
-      {result && (
-        <SectionCard>
+      {/* Cumulative cost over time */}
+      {result ? (
+        <DataCard>
           <CumulativeCostChart
             data={result.noBreach.cumulativeByDay}
             daysVacant={inputs.daysVacant}
           />
-        </SectionCard>
-      )}
-      {!result && (
-        <SectionCard>
-          <div className="h-64 flex items-center justify-center">
+        </DataCard>
+      ) : (
+        <DataCard>
+          <div className="h-48 flex items-center justify-center">
             <div className="text-center">
-              <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-              <p className="text-xs text-slate-400">Building cumulative chart...</p>
+              <div className="w-6 h-6 border-2 border-[#C4A55A] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+              <p className="text-[11px] text-[#6B7FA3]">Building cumulative chart...</p>
             </div>
           </div>
-        </SectionCard>
+        </DataCard>
       )}
 
-      {/* Block 6: Simulation Distribution Histogram */}
+      {/* Outcome distribution histogram */}
       {result && (
-        <SectionCard>
+        <DataCard>
           <HistogramChart
             noBreachIterations={result.noBreach.iterations}
             breachIterations={result.withBreach.iterations}
           />
-        </SectionCard>
+        </DataCard>
       )}
 
-      {/* Block 7: Search ROI */}
-      <div>
-        <SectionTitle>Specialized Search ROI</SectionTitle>
-        <SearchROICard result={result} />
-      </div>
+      {/* ════════════════════════════════════════════════
+          SECTION 3 — ACCELERATE THE SEARCH
+      ════════════════════════════════════════════════ */}
+      <SectionDivider label="Accelerate the Search" />
 
-      {/* Block 8: Breach Warning (conditional) */}
+      <SearchROICard result={result} />
+
       <BreachWarning visible={inputs.breachOccurred} />
 
-      {/* Block 9: CTA */}
       <CTASection />
 
       {/* Hidden print component */}

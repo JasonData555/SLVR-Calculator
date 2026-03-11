@@ -65,9 +65,7 @@ function SliderInput({
 
   return (
     <div className="space-y-2">
-      <Label className="text-xs font-medium text-slate-600 uppercase tracking-wide">
-        {label}
-      </Label>
+      <Label className="text-label">{label}</Label>
       <div className="flex items-center gap-3">
         <div className="flex-1">
           <Slider
@@ -81,7 +79,7 @@ function SliderInput({
         </div>
         <div className="relative flex items-center w-28 shrink-0">
           {prefix && (
-            <span className="absolute left-2 text-slate-500 text-sm pointer-events-none font-mono">
+            <span className="absolute left-2.5 text-[#6B7FA3] text-sm pointer-events-none font-mono">
               {prefix}
             </span>
           )}
@@ -89,19 +87,20 @@ function SliderInput({
             type="text"
             value={formatDisplay ? formatDisplay(value) : value.toLocaleString()}
             onChange={handleInput}
-            className={`w-full border border-slate-200 rounded-md py-1.5 text-sm font-mono text-right
-              bg-white focus:outline-none focus:ring-1 focus:ring-slate-400
-              ${prefix ? 'pl-4 pr-2' : 'px-2'}
-              ${suffix ? 'pr-6' : ''}`}
+            className={`w-full border border-[#1E3A5F] rounded-md py-1.5 text-sm font-mono text-right
+              bg-[#0A1628] text-[#E8EDF5] focus:outline-none focus:ring-1 focus:ring-[#C4A55A]/50
+              focus:border-[#C4A55A]/50 transition-colors
+              ${prefix ? 'pl-5 pr-2' : 'px-2'}
+              ${suffix ? 'pr-7' : ''}`}
           />
           {suffix && (
-            <span className="absolute right-2 text-slate-500 text-sm pointer-events-none">
+            <span className="absolute right-2.5 text-[#6B7FA3] text-xs pointer-events-none">
               {suffix}
             </span>
           )}
         </div>
       </div>
-      <div className="flex justify-between text-xs text-slate-400 font-mono">
+      <div className="flex justify-between text-[10px] text-[#6B7FA3]/60 font-mono">
         <span>{prefix}{min.toLocaleString()}{suffix}</span>
         <span>{prefix}{max.toLocaleString()}{suffix}</span>
       </div>
@@ -112,10 +111,8 @@ function SliderInput({
 // ——— Section header ——————————————————————————————————————————
 function SectionHeader({ title }: { title: string }) {
   return (
-    <div className="pb-2 mb-4 border-b border-slate-100">
-      <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest">
-        {title}
-      </h3>
+    <div className="pb-2 mb-4 border-b border-[#1E3A5F]">
+      <h3 className="text-label">{title}</h3>
     </div>
   );
 }
@@ -133,16 +130,20 @@ function LabeledSelect<T extends string>({
 }: LabeledSelectProps<T>) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-xs font-medium text-slate-600 uppercase tracking-wide">
-        {label}
-      </Label>
+      <Label className="text-label">{label}</Label>
       <Select value={value} onValueChange={(v) => { if (v !== null) onValueChange(v as T); }}>
-        <SelectTrigger className="w-full bg-white border-slate-200 text-sm">
+        <SelectTrigger className="w-full border-[#1E3A5F] bg-[#0A1628] text-[#E8EDF5] text-sm
+          hover:border-[#C4A55A]/40 focus:ring-[#C4A55A]/30 focus:border-[#C4A55A]/50 transition-colors">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-[#162040] border-[#1E3A5F]">
           {options.map((opt) => (
-            <SelectItem key={opt} value={opt} className="text-sm">
+            <SelectItem
+              key={opt}
+              value={opt}
+              className="text-sm text-[#E8EDF5] focus:bg-[#1E3A5F] focus:text-[#E8EDF5]
+                data-[highlighted]:bg-[#1E3A5F]"
+            >
               {opt}
             </SelectItem>
           ))}
@@ -164,8 +165,10 @@ function ToggleRow({
   return (
     <div className="flex items-center justify-between gap-3 py-1">
       <div>
-        <p className="text-sm font-medium text-slate-700">{label}</p>
-        {description && <p className="text-xs text-slate-400 mt-0.5">{description}</p>}
+        <p className="text-sm font-medium text-[#E8EDF5]/80">{label}</p>
+        {description && (
+          <p className="text-[11px] text-[#C4A55A] mt-0.5 font-medium">{description}</p>
+        )}
       </div>
       <Switch checked={checked} onCheckedChange={onCheckedChange} />
     </div>
@@ -258,7 +261,7 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
               options={['Low', 'Medium', 'High']}
               onValueChange={(v) => onChange('gapSeverity', v)}
             />
-            <p className="text-[11px] text-slate-400 leading-snug">{GAP_SEVERITY_HELPER}</p>
+            <p className="text-[11px] text-[#6B7FA3]/70 leading-snug">{GAP_SEVERITY_HELPER}</p>
           </div>
 
           <ToggleRow
@@ -271,10 +274,9 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
       </div>
 
       {/* ── Attribution ── */}
-      <div className="pt-2 border-t border-slate-100">
-        <p className="text-[10px] text-slate-400 leading-relaxed">
-          Calculations based on IBM Cost of Data Breach 2025 and Cyentia IRIS 2025.
-          Monte Carlo engine runs 5,000 simulations per scenario.
+      <div className="pt-2 border-t border-[#1E3A5F]">
+        <p className="text-[10px] text-[#6B7FA3]/60 leading-relaxed font-mono">
+          IBM Cost of Data Breach 2025 · Cyentia IRIS 2025 · 5,000 MC iterations/scenario
         </p>
       </div>
     </div>

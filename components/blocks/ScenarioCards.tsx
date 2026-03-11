@@ -10,7 +10,7 @@ interface ScenarioCardsProps {
 }
 
 function Skeleton({ className = '' }: { className?: string }) {
-  return <div className={`bg-slate-200 rounded animate-pulse ${className}`} />;
+  return <div className={`skeleton-dark rounded animate-pulse ${className}`} />;
 }
 
 interface CardProps {
@@ -34,17 +34,15 @@ function ScenarioCard({
 }: CardProps) {
   return (
     <div
-      className={`rounded-xl border p-5 flex flex-col gap-4 transition-all duration-300
+      className={`rounded-lg border p-5 flex flex-col gap-4 transition-all duration-300
         ${isBreach
-          ? 'bg-red-50 border-red-200'
-          : 'bg-white border-slate-200 shadow-sm'}`}
+          ? 'bg-red-950/20 border-red-800/40'
+          : 'bg-[#162040] border-[#1E3A5F]'}`}
     >
       <div>
-        <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-0.5">
-          {title}
-        </p>
+        <p className="text-label mb-0.5">{title}</p>
         {subtitle && (
-          <p className={`text-xs font-medium ${isBreach ? 'text-red-600' : 'text-slate-400'}`}>
+          <p className={`text-[11px] font-medium ${isBreach ? 'text-red-400' : 'text-[#6B7FA3]'}`}>
             {subtitle}
           </p>
         )}
@@ -52,33 +50,33 @@ function ScenarioCard({
 
       {/* Daily cost */}
       <div>
-        <p className="text-xs text-slate-400 mb-1">Daily Exposure (P50)</p>
-        <p className={`font-mono text-3xl font-bold tracking-tight transition-all duration-300
-          ${isBreach ? 'text-red-700' : 'text-slate-900'}`}>
+        <p className="text-[10px] text-[#6B7FA3] mb-1 uppercase tracking-wide">Daily Exposure (P50)</p>
+        <p className={`text-data font-semibold text-xl tracking-tight transition-all duration-300
+          ${isBreach ? 'text-red-400' : 'text-[#F0C674]'}`}>
           {fmt(p50Daily)}
         </p>
-        <p className="font-mono text-xs text-slate-400 mt-1">
-          Typically {fmt(p10Daily)} – {fmt(p90Daily)} per day
+        <p className="text-data-sm text-[#6B7FA3] mt-1">
+          {fmt(p10Daily)}&thinsp;–&thinsp;{fmt(p90Daily)} per day
         </p>
       </div>
 
       {/* Total cost */}
-      <div className={`pt-3 border-t ${isBreach ? 'border-red-100' : 'border-slate-100'}`}>
-        <p className="text-xs text-slate-400 mb-1">Total Exposure (P50)</p>
-        <p className={`font-mono text-xl font-semibold transition-all duration-300
-          ${isBreach ? 'text-red-700' : 'text-slate-800'}`}>
+      <div className={`pt-3 border-t ${isBreach ? 'border-red-900/40' : 'border-[#1E3A5F]'}`}>
+        <p className="text-[10px] text-[#6B7FA3] mb-1 uppercase tracking-wide">Total Exposure (P50)</p>
+        <p className={`text-data font-semibold text-lg transition-all duration-300
+          ${isBreach ? 'text-red-400' : 'text-[#E8EDF5]'}`}>
           {fmt(p50Total)}
         </p>
-        <p className="font-mono text-xs text-slate-400 mt-1">
-          Typically {fmtCompact(p10Total)} – {fmtCompact(p90Total)} total
+        <p className="text-data-sm text-[#6B7FA3] mt-1">
+          {fmtCompact(p10Total)}&thinsp;–&thinsp;{fmtCompact(p90Total)} range
         </p>
         {deltaLabel && (
-          <p className="text-xs font-semibold text-red-600 mt-2">{deltaLabel}</p>
+          <p className="text-[11px] font-semibold text-red-400 mt-2">{deltaLabel}</p>
         )}
       </div>
 
-      <p className="text-[10px] text-slate-400 mt-auto">
-        Based on 5,000 simulated outcomes
+      <p className="text-[10px] text-[#6B7FA3]/50 mt-auto font-mono">
+        5,000 simulated outcomes
       </p>
     </div>
   );
@@ -88,19 +86,19 @@ export default function ScenarioCards({ result, isRunning, daysVacant }: Scenari
   if (isRunning || !result) {
     return (
       <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-xl border border-slate-200 p-5 space-y-4">
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-10 w-40" />
-          <Skeleton className="h-3 w-48" />
-          <div className="pt-3 border-t border-slate-100 space-y-2">
-            <Skeleton className="h-7 w-36" />
-            <Skeleton className="h-3 w-44" />
+        <div className="rounded-lg border border-[#1E3A5F] bg-[#162040] p-5 space-y-4">
+          <Skeleton className="h-3 w-32" />
+          <Skeleton className="h-6 w-40" />
+          <Skeleton className="h-3 w-44" />
+          <div className="pt-3 border-t border-[#1E3A5F] space-y-2">
+            <Skeleton className="h-5 w-36" />
+            <Skeleton className="h-3 w-40" />
           </div>
         </div>
-        <div className="rounded-xl border border-red-100 bg-red-50 p-5 space-y-4">
-          <Skeleton className="h-4 w-32 bg-red-200" />
-          <Skeleton className="h-10 w-40 bg-red-200" />
-          <Skeleton className="h-3 w-48 bg-red-200" />
+        <div className="rounded-lg border border-red-800/30 bg-red-950/20 p-5 space-y-4">
+          <Skeleton className="h-3 w-32" />
+          <Skeleton className="h-6 w-40" />
+          <Skeleton className="h-3 w-44" />
         </div>
       </div>
     );

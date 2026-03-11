@@ -20,68 +20,81 @@ export default function Home() {
   const { result, isRunning } = useSimulation(inputs);
 
   return (
-    <div className="min-h-screen" style={{ background: '#F8F9FA' }}>
+    <div className="min-h-screen bg-[#0A1628]">
+
       {/* ── Page Header ── */}
       <header
-        className="sticky top-0 z-50 w-full"
-        style={{ background: '#0F1729' }}
+        className="sticky top-0 z-50 w-full border-b border-[#1E3A5F]"
+        style={{ background: '#080F1E' }}
       >
-        <div className="max-w-[1600px] mx-auto px-6 py-3.5 flex items-center justify-between">
-          <h1 className="text-white font-semibold text-base leading-tight">
-            Security Leader Vacancy Risk Calculator
-          </h1>
-          <p className="text-slate-400 text-xs font-light tracking-wide">
-            Powered by Hitch Partners
-          </p>
+        <div className="max-w-[1600px] mx-auto px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-px h-4 bg-[#C4A55A]" aria-hidden />
+            <h1 className="text-[#E8EDF5] font-semibold text-sm leading-tight tracking-wide">
+              Security Leader Vacancy Risk Calculator
+            </h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-[#6B7FA3] text-xs font-light tracking-widest uppercase">
+              Powered by Hitch Partners
+            </span>
+            <span className="text-[#1E3A5F] text-xs">·</span>
+            <span className="text-[#6B7FA3] text-[10px] font-mono">
+              VRQM · 5,000 MC Iterations
+            </span>
+          </div>
         </div>
       </header>
 
       {/* ── Two-Column Layout ── */}
       <div className="max-w-[1600px] mx-auto">
-        <div className="lg:flex lg:h-[calc(100vh-52px)]">
+        <div className="lg:flex lg:h-[calc(100vh-48px)]">
 
           {/* Left — Input Panel (40%, sticky) */}
           <div
-            className="lg:w-[40%] lg:shrink-0 lg:sticky lg:top-[52px] lg:h-[calc(100vh-52px)] lg:overflow-y-auto
-              border-b lg:border-b-0 lg:border-r border-slate-200 bg-white"
+            className="lg:w-[40%] lg:shrink-0 lg:sticky lg:top-[48px] lg:h-[calc(100vh-48px)] lg:overflow-y-auto
+              border-b lg:border-b-0 lg:border-r border-[#1E3A5F] bg-[#0D1929]"
           >
             <InputPanel inputs={inputs} onChange={handleChange} />
           </div>
 
           {/* Right — Results Panel (60%, scrollable) */}
-          <div className="lg:flex-1 lg:overflow-y-auto">
+          <div className="lg:flex-1 lg:overflow-y-auto bg-[#0A1628]">
             <ResultsPanel result={result} isRunning={isRunning} inputs={inputs} />
 
             {/* Footer */}
-            <footer className="border-t border-slate-200 bg-white px-6 py-8 mt-4">
-              <div className="max-w-3xl space-y-5 text-xs text-slate-500 leading-relaxed">
+            <footer className="border-t border-[#1E3A5F] bg-[#080F1E] px-6 py-8 mt-2">
+              <div className="max-w-3xl space-y-5 text-xs text-[#6B7FA3] leading-relaxed">
                 <div>
-                  <p className="font-semibold text-slate-700 mb-1">Methodology</p>
+                  <p className="font-semibold text-[#E8EDF5]/60 mb-1 uppercase tracking-wide text-[10px]">
+                    Methodology
+                  </p>
                   <p>
                     Cost projections are risk-weighted estimates based on industry benchmarks,
                     regulatory data, and statistical modeling. These represent potential financial
                     impacts derived from empirical data across 600+ global organizations.
-                    Calculations utilize Hitch Partners&rsquo; proprietary CVR (CISO Vacancy Risk)
-                    methodology to model exponential risk acceleration during leadership gaps.
-                    Individual organizational outcomes will vary based on specific risk factors
-                    and security posture.
+                    Calculations utilize Hitch Partners&rsquo; proprietary VRQM (Vacancy Risk
+                    Quantification Model) methodology to model exponential risk acceleration during
+                    leadership gaps. Individual organizational outcomes will vary based on specific
+                    risk factors and security posture.
                   </p>
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-700 mb-1">Data Sources</p>
+                  <p className="font-semibold text-[#E8EDF5]/60 mb-1 uppercase tracking-wide text-[10px]">
+                    Data Sources
+                  </p>
                   <p>
                     Industry breach data sourced from IBM Cost of Data Breach Report 2025,
                     Cyentia Information Risk Insights Study (IRIS 2025) statistical analysis,
-                    and established cybersecurity industry standards. Hitch Partners applied
-                    risk-weighted industry averages segmented by sector and company size to
-                    reflect your organization&rsquo;s specific risk profile. Security leader
-                    time-to-fill benchmarks sourced from IANS Research / Artico Search CISO
-                    Hiring Study. Hitch Partners placement timeline reflects verified internal
-                    search performance data.
+                    and established cybersecurity industry standards. Security leader time-to-fill
+                    benchmarks sourced from IANS Research / Artico Search CISO Hiring Study.
+                    Hitch Partners placement timeline reflects verified internal search performance data.
                   </p>
                 </div>
                 <div>
-                  <p className="font-semibold text-slate-700 mb-1">Disclaimer</p>
+                  <p className="font-semibold text-[#E8EDF5]/60 mb-1 uppercase tracking-wide text-[10px]">
+                    Disclaimer
+                  </p>
                   <p>
                     These projections represent statistical estimates based on industry data,
                     not guarantees of individual outcomes. Organizations should conduct their
@@ -89,10 +102,10 @@ export default function Home() {
                     professionals.
                   </p>
                 </div>
-                <div className="pt-4 border-t border-slate-100">
-                  <p className="text-slate-400">
-                    &copy; {new Date().getFullYear()} Hitch Partners. All rights reserved.
-                    Powered by VRQM stochastic methodology with Monte Carlo simulation.
+                <div className="pt-4 border-t border-[#1E3A5F]">
+                  <p className="text-[#6B7FA3]/60 font-mono text-[10px]">
+                    &copy; {new Date().getFullYear()} Hitch Partners &nbsp;·&nbsp; All rights reserved &nbsp;·&nbsp;
+                    VRQM stochastic methodology with Monte Carlo simulation
                   </p>
                 </div>
               </div>
