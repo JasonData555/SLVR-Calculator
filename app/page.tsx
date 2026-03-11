@@ -1,65 +1,106 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useCallback } from 'react';
+import InputPanel from '@/components/InputPanel';
+import ResultsPanel from '@/components/ResultsPanel';
+import { useSimulation } from '@/hooks/useSimulation';
+import type { SimulationInputs } from '@/lib/types';
+import { INPUT_DEFAULTS } from '@/lib/constants';
 
 export default function Home() {
+  const [inputs, setInputs] = useState<SimulationInputs>(INPUT_DEFAULTS);
+
+  const handleChange = useCallback(
+    <K extends keyof SimulationInputs>(key: K, value: SimulationInputs[K]) => {
+      setInputs((prev) => ({ ...prev, [key]: value }));
+    },
+    []
+  );
+
+  const { result, isRunning } = useSimulation(inputs);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen" style={{ background: '#F8F9FA' }}>
+      {/* ── Page Header ── */}
+      <header
+        className="sticky top-0 z-50 w-full"
+        style={{ background: '#0F1729' }}
+      >
+        <div className="max-w-[1600px] mx-auto px-6 py-3.5 flex items-center justify-between">
+          <h1 className="text-white font-semibold text-base leading-tight">
+            Security Leader Vacancy Risk Calculator
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="text-slate-400 text-xs font-light tracking-wide">
+            Powered by Hitch Partners
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+      </header>
+
+      {/* ── Two-Column Layout ── */}
+      <div className="max-w-[1600px] mx-auto">
+        <div className="lg:flex lg:h-[calc(100vh-52px)]">
+
+          {/* Left — Input Panel (40%, sticky) */}
+          <div
+            className="lg:w-[40%] lg:shrink-0 lg:sticky lg:top-[52px] lg:h-[calc(100vh-52px)] lg:overflow-y-auto
+              border-b lg:border-b-0 lg:border-r border-slate-200 bg-white"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <InputPanel inputs={inputs} onChange={handleChange} />
+          </div>
+
+          {/* Right — Results Panel (60%, scrollable) */}
+          <div className="lg:flex-1 lg:overflow-y-auto">
+            <ResultsPanel result={result} isRunning={isRunning} inputs={inputs} />
+
+            {/* Footer */}
+            <footer className="border-t border-slate-200 bg-white px-6 py-8 mt-4">
+              <div className="max-w-3xl space-y-5 text-xs text-slate-500 leading-relaxed">
+                <div>
+                  <p className="font-semibold text-slate-700 mb-1">Methodology</p>
+                  <p>
+                    Cost projections are risk-weighted estimates based on industry benchmarks,
+                    regulatory data, and statistical modeling. These represent potential financial
+                    impacts derived from empirical data across 600+ global organizations.
+                    Calculations utilize Hitch Partners&rsquo; proprietary CVR (CISO Vacancy Risk)
+                    methodology to model exponential risk acceleration during leadership gaps.
+                    Individual organizational outcomes will vary based on specific risk factors
+                    and security posture.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-700 mb-1">Data Sources</p>
+                  <p>
+                    Industry breach data sourced from IBM Cost of Data Breach Report 2025,
+                    Cyentia Information Risk Insights Study (IRIS 2025) statistical analysis,
+                    and established cybersecurity industry standards. Hitch Partners applied
+                    risk-weighted industry averages segmented by sector and company size to
+                    reflect your organization&rsquo;s specific risk profile. Security leader
+                    time-to-fill benchmarks sourced from IANS Research / Artico Search CISO
+                    Hiring Study. Hitch Partners placement timeline reflects verified internal
+                    search performance data.
+                  </p>
+                </div>
+                <div>
+                  <p className="font-semibold text-slate-700 mb-1">Disclaimer</p>
+                  <p>
+                    These projections represent statistical estimates based on industry data,
+                    not guarantees of individual outcomes. Organizations should conduct their
+                    own risk assessment in consultation with qualified cybersecurity and legal
+                    professionals.
+                  </p>
+                </div>
+                <div className="pt-4 border-t border-slate-100">
+                  <p className="text-slate-400">
+                    &copy; {new Date().getFullYear()} Hitch Partners. All rights reserved.
+                    Powered by VRQM stochastic methodology with Monte Carlo simulation.
+                  </p>
+                </div>
+              </div>
+            </footer>
+          </div>
+
         </div>
-      </main>
+      </div>
     </div>
   );
 }
