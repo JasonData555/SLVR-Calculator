@@ -65,7 +65,9 @@ function SliderInput({
 
   return (
     <div className="space-y-2">
-      <Label className="text-label">{label}</Label>
+      <Label style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: 500, color: '#3D5068' }}>
+        {label}
+      </Label>
       <div className="flex items-center gap-3">
         <div className="flex-1">
           <Slider
@@ -77,9 +79,9 @@ function SliderInput({
             className="w-full"
           />
         </div>
-        <div className="relative flex items-center w-28 shrink-0">
+        <div className="relative flex items-center shrink-0" style={{ width: '80px' }}>
           {prefix && (
-            <span className="absolute left-2.5 text-[#6B7FA3] text-sm pointer-events-none font-mono">
+            <span className="absolute left-2 pointer-events-none" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '13px', color: '#7A8FA6' }}>
               {prefix}
             </span>
           )}
@@ -87,20 +89,28 @@ function SliderInput({
             type="text"
             value={formatDisplay ? formatDisplay(value) : value.toLocaleString()}
             onChange={handleInput}
-            className={`w-full border border-[#1E3A5F] rounded-md py-1.5 text-sm font-mono text-right
-              bg-[#0A1628] text-[#E8EDF5] focus:outline-none focus:ring-1 focus:ring-[#C4A55A]/50
-              focus:border-[#C4A55A]/50 transition-colors
-              ${prefix ? 'pl-5 pr-2' : 'px-2'}
-              ${suffix ? 'pr-7' : ''}`}
+            className="w-full focus:outline-none transition-colors"
+            style={{
+              fontFamily: 'var(--font-dm-mono)',
+              fontSize: '13px',
+              textAlign: 'right',
+              border: '1px solid #DDE3EC',
+              borderRadius: '4px',
+              padding: prefix ? '5px 6px 5px 16px' : suffix ? '5px 22px 5px 6px' : '5px 6px',
+              background: '#FFFFFF',
+              color: '#1A2332',
+            }}
+            onFocus={(e) => { e.target.style.borderColor = '#1D4ED8'; }}
+            onBlur={(e) => { e.target.style.borderColor = '#DDE3EC'; }}
           />
           {suffix && (
-            <span className="absolute right-2.5 text-[#6B7FA3] text-xs pointer-events-none">
+            <span className="absolute right-2 pointer-events-none" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '11px', color: '#7A8FA6' }}>
               {suffix}
             </span>
           )}
         </div>
       </div>
-      <div className="flex justify-between text-[10px] text-[#6B7FA3]/60 font-mono">
+      <div className="flex justify-between" style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: '#7A8FA6' }}>
         <span>{prefix}{min.toLocaleString()}{suffix}</span>
         <span>{prefix}{max.toLocaleString()}{suffix}</span>
       </div>
@@ -111,8 +121,10 @@ function SliderInput({
 // ——— Section header ——————————————————————————————————————————
 function SectionHeader({ title }: { title: string }) {
   return (
-    <div className="pb-2 mb-4 border-b border-[#1E3A5F]">
-      <h3 className="text-label">{title}</h3>
+    <div style={{ borderBottom: '1px solid #DDE3EC', paddingBottom: '8px', marginBottom: '16px' }}>
+      <h3 style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7A8FA6' }}>
+        {title}
+      </h3>
     </div>
   );
 }
@@ -130,19 +142,31 @@ function LabeledSelect<T extends string>({
 }: LabeledSelectProps<T>) {
   return (
     <div className="space-y-1.5">
-      <Label className="text-label">{label}</Label>
+      <Label style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: 500, color: '#3D5068' }}>
+        {label}
+      </Label>
       <Select value={value} onValueChange={(v) => { if (v !== null) onValueChange(v as T); }}>
-        <SelectTrigger className="w-full border-[#1E3A5F] bg-[#0A1628] text-[#E8EDF5] text-sm
-          hover:border-[#C4A55A]/40 focus:ring-[#C4A55A]/30 focus:border-[#C4A55A]/50 transition-colors">
+        <SelectTrigger
+          className="w-full focus:outline-none transition-colors"
+          style={{
+            border: '1px solid #DDE3EC',
+            borderRadius: '4px',
+            background: '#FFFFFF',
+            fontFamily: 'var(--font-dm-sans)',
+            fontSize: '13px',
+            color: '#1A2332',
+            height: '36px',
+          }}
+        >
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="bg-[#162040] border-[#1E3A5F]">
+        <SelectContent style={{ background: '#FFFFFF', border: '1px solid #DDE3EC', borderRadius: '4px' }}>
           {options.map((opt) => (
             <SelectItem
               key={opt}
               value={opt}
-              className="text-sm text-[#E8EDF5] focus:bg-[#1E3A5F] focus:text-[#E8EDF5]
-                data-[highlighted]:bg-[#1E3A5F]"
+              style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '13px', color: '#1A2332' }}
+              className="focus:bg-[#EBF1F8] focus:text-[#1A2332] data-[highlighted]:bg-[#EBF1F8]"
             >
               {opt}
             </SelectItem>
@@ -165,9 +189,13 @@ function ToggleRow({
   return (
     <div className="flex items-center justify-between gap-3 py-1">
       <div>
-        <p className="text-sm font-medium text-[#E8EDF5]/80">{label}</p>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '12px', fontWeight: 500, color: '#1A2332' }}>
+          {label}
+        </p>
         {description && (
-          <p className="text-[11px] text-[#C4A55A] mt-0.5 font-medium">{description}</p>
+          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', fontStyle: 'italic', color: '#B45309', marginTop: '2px' }}>
+            {description}
+          </p>
         )}
       </div>
       <Switch checked={checked} onCheckedChange={onCheckedChange} />
@@ -178,7 +206,7 @@ function ToggleRow({
 // ——— Main InputPanel ——————————————————————————————————————————
 export default function InputPanel({ inputs, onChange }: InputPanelProps) {
   return (
-    <div className="p-6 space-y-8">
+    <div style={{ padding: '28px 24px' }} className="space-y-8">
       {/* ── Section 1: Organization Profile ── */}
       <div>
         <SectionHeader title="Organization Profile" />
@@ -235,6 +263,9 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
         </div>
       </div>
 
+      {/* ── Divider ── */}
+      <div style={{ borderTop: '1px solid #DDE3EC', margin: '0' }} />
+
       {/* ── Section 2: Vacancy Details ── */}
       <div>
         <SectionHeader title="Vacancy Details" />
@@ -254,14 +285,16 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
             onCheckedChange={(v) => onChange('hasInterim', v)}
           />
 
-          <div className="space-y-1.5">
+          <div className="space-y-1">
             <LabeledSelect<GapSeverity>
               label="Leadership Gap Severity"
               value={inputs.gapSeverity}
               options={['Low', 'Medium', 'High']}
               onValueChange={(v) => onChange('gapSeverity', v)}
             />
-            <p className="text-[11px] text-[#6B7FA3]/70 leading-snug">{GAP_SEVERITY_HELPER}</p>
+            <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', fontStyle: 'italic', color: '#7A8FA6', lineHeight: 1.4, marginTop: '4px' }}>
+              {GAP_SEVERITY_HELPER}
+            </p>
           </div>
 
           <ToggleRow
@@ -274,8 +307,8 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
       </div>
 
       {/* ── Attribution ── */}
-      <div className="pt-2 border-t border-[#1E3A5F]">
-        <p className="text-[10px] text-[#6B7FA3]/60 leading-relaxed font-mono">
+      <div style={{ paddingTop: '8px', borderTop: '1px solid #DDE3EC' }}>
+        <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.5 }}>
           IBM Cost of Data Breach 2025 · Cyentia IRIS 2025 · 5,000 MC iterations/scenario
         </p>
       </div>

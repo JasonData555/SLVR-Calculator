@@ -38,14 +38,20 @@ function CustomTooltip({
   const p90 = payload.find((p) => p.name === 'p90')?.value ?? 0;
 
   return (
-    <div className="bg-[#162040] border border-[#1E3A5F] rounded-lg shadow-xl p-3 text-xs font-mono">
-      <p className="font-sans font-semibold text-[#E8EDF5]/60 mb-2 text-[10px] uppercase tracking-wide">
+    <div style={{
+      background: '#FFFFFF',
+      border: '1px solid #DDE3EC',
+      borderRadius: '4px',
+      padding: '10px 12px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+    }}>
+      <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '8px' }}>
         Day {label}
       </p>
-      <div className="space-y-1">
-        <p className="text-[#6B7FA3]">P10: <span className="text-[#E8EDF5] font-semibold">{fmt(p10)}</span></p>
-        <p className="text-[#C4A55A]">P50: <span className="font-semibold">{fmt(p50)}</span></p>
-        <p className="text-[#6B7FA3]">P90: <span className="text-[#E8EDF5] font-semibold">{fmt(p90)}</span></p>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontFamily: 'var(--font-dm-mono)', fontSize: '11px' }}>
+        <p style={{ color: '#7A8FA6' }}>P10: <span style={{ color: '#1A2332', fontWeight: 500 }}>{fmt(p10)}</span></p>
+        <p style={{ color: '#0F1729', fontWeight: 500 }}>P50: <span>{fmt(p50)}</span></p>
+        <p style={{ color: '#7A8FA6' }}>P90: <span style={{ color: '#1A2332', fontWeight: 500 }}>{fmt(p90)}</span></p>
       </div>
     </div>
   );
@@ -66,25 +72,27 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
   const showGen    = daysVacant >= 94;
   const showIndust = daysVacant >= 127;
 
-  const gridColor  = '#1E3A5F';
-  const axisColor  = '#6B7FA3';
+  const gridColor  = '#EBF1F8';
+  const axisColor  = '#7A8FA6';
   const monoFont   = 'var(--font-dm-mono)';
 
   return (
     <div>
-      <div className="mb-4">
-        <h3 className="text-sm font-semibold text-[#E8EDF5]">Cumulative Vacancy Risk Over Time</h3>
-        <p className="text-[11px] text-[#6B7FA3] mt-0.5">
+      <div style={{ marginBottom: '16px' }}>
+        <h3 style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '12px', fontWeight: 500, color: '#1A2332' }}>
+          Cumulative Vacancy Risk Over Time
+        </h3>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', color: '#7A8FA6', marginTop: '2px' }}>
           Shaded band = 80% confidence interval · 5,000 simulations
         </p>
       </div>
       <ResponsiveContainer width="100%" height={240}>
         <AreaChart data={chartData} margin={{ top: 8, right: 20, left: 55, bottom: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} strokeOpacity={0.6} />
+          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} strokeOpacity={1} />
           <XAxis
             dataKey="day"
             tick={{ fontSize: 10, fill: axisColor, fontFamily: monoFont }}
-            label={{ value: 'Days Vacant', position: 'insideBottom', offset: -5, fontSize: 10, fill: axisColor }}
+            label={{ value: 'Days Vacant', position: 'insideBottom', offset: -5, fontSize: 10, fill: axisColor, fontFamily: monoFont }}
             stroke={gridColor}
           />
           <YAxis
@@ -95,13 +103,13 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
           />
           <Tooltip content={<CustomTooltip />} />
 
-          {/* P10–P90 confidence band */}
+          {/* P10–P90 confidence band — subtle navy wash */}
           <Area
             type="monotone"
             dataKey="p90"
             stroke="none"
-            fill="#C4A55A"
-            fillOpacity={0.08}
+            fill="#0F1729"
+            fillOpacity={0.06}
             name="p90"
             legendType="none"
           />
@@ -109,36 +117,36 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
             type="monotone"
             dataKey="p10"
             stroke="none"
-            fill="#0A1628"
+            fill="#F7F9FB"
             fillOpacity={1}
             name="p10"
             legendType="none"
           />
 
-          {/* P50 — executive gold primary line */}
+          {/* P50 — navy primary line */}
           <Area
             type="monotone"
             dataKey="p50"
-            stroke="#C4A55A"
+            stroke="#0F1729"
             strokeWidth={2}
             fill="none"
             name="p50"
             dot={false}
-            activeDot={{ r: 4, fill: '#C4A55A', stroke: '#0A1628', strokeWidth: 2 }}
+            activeDot={{ r: 4, fill: '#0F1729', stroke: '#FFFFFF', strokeWidth: 2 }}
           />
 
           {/* Search timeline reference lines */}
           {showHitch && (
             <ReferenceLine
               x={62}
-              stroke="#2DD4BF"
+              stroke="#15803D"
               strokeDasharray="5 4"
-              strokeWidth={1.5}
+              strokeWidth={1}
               label={{
                 value: 'Hitch ~62d',
                 position: 'top',
                 fontSize: 9,
-                fill: '#2DD4BF',
+                fill: '#15803D',
                 fontFamily: 'var(--font-dm-sans)',
               }}
             />
@@ -146,14 +154,14 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
           {showGen && (
             <ReferenceLine
               x={94}
-              stroke="#6B7FA3"
+              stroke="#B45309"
               strokeDasharray="5 4"
-              strokeWidth={1.5}
+              strokeWidth={1}
               label={{
                 value: 'General ~94d',
                 position: 'top',
                 fontSize: 9,
-                fill: '#6B7FA3',
+                fill: '#B45309',
                 fontFamily: 'var(--font-dm-sans)',
               }}
             />
@@ -161,14 +169,14 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
           {showIndust && (
             <ReferenceLine
               x={127}
-              stroke="#EF4444"
+              stroke="#B91C1C"
               strokeDasharray="5 4"
-              strokeWidth={1.5}
+              strokeWidth={1}
               label={{
                 value: 'Industry ~127d',
                 position: 'top',
                 fontSize: 9,
-                fill: '#EF4444',
+                fill: '#B91C1C',
                 fontFamily: 'var(--font-dm-sans)',
               }}
             />
@@ -177,26 +185,26 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
       </ResponsiveContainer>
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-4 mt-2 text-[10px] text-[#6B7FA3]">
-        <span className="flex items-center gap-1.5">
-          <span className="w-4 h-0.5 bg-[#C4A55A] inline-block" /> P50 Median
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '8px', fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6' }}>
+        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ display: 'inline-block', width: '16px', height: '2px', background: '#0F1729' }} /> P50 Median
         </span>
-        <span className="flex items-center gap-1.5">
-          <span className="w-4 h-3 bg-[#C4A55A]/10 border border-[#C4A55A]/20 inline-block rounded-sm" /> 80% CI
+        <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <span style={{ display: 'inline-block', width: '16px', height: '12px', background: 'rgba(15,23,41,0.06)', border: '1px solid rgba(15,23,41,0.12)', borderRadius: '2px' }} /> 80% CI
         </span>
         {showHitch && (
-          <span className="flex items-center gap-1.5">
-            <span className="w-4 border-t border-dashed border-[#2DD4BF] inline-block" /> Hitch Partners
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ display: 'inline-block', width: '16px', borderTop: '1px dashed #15803D' }} /> Hitch Partners
           </span>
         )}
         {showGen && (
-          <span className="flex items-center gap-1.5">
-            <span className="w-4 border-t border-dashed border-[#6B7FA3] inline-block" /> General Search
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ display: 'inline-block', width: '16px', borderTop: '1px dashed #B45309' }} /> General Search
           </span>
         )}
         {showIndust && (
-          <span className="flex items-center gap-1.5">
-            <span className="w-4 border-t border-dashed border-[#EF4444] inline-block" /> Industry Typical
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ display: 'inline-block', width: '16px', borderTop: '1px dashed #B91C1C' }} /> Industry Typical
           </span>
         )}
       </div>

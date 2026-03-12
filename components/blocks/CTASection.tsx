@@ -6,37 +6,79 @@ const METHODOLOGY_URL = '#methodology';
 
 export default function CTASection() {
   return (
-    <div className="bg-[#0D1929] border border-[#C4A55A]/20 rounded-lg p-6">
-      <div className="mb-1">
-        <p className="text-label mb-2">Recommended Next Steps</p>
-        <h3 className="text-base font-semibold text-[#E8EDF5] leading-snug">
-          Reduce Your Exposure with a Faster Search
-        </h3>
-      </div>
-      <p className="text-sm text-[#6B7FA3] leading-relaxed mb-5 mt-2">
-        Hitch Partners typically places CISOs and security leaders in ~62 days — roughly 32 days
-        faster than general search firms. Every additional day of vacancy carries measurable,
-        quantifiable financial risk.
-      </p>
-      <div className="flex flex-col sm:flex-row gap-3">
-        <a
-          href={CONTACT_URL}
-          className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg
-            bg-[#C4A55A] hover:bg-[#D4B56A] text-[#0A1628] text-sm font-semibold
-            transition-colors tracking-wide"
-        >
-          Schedule a Conversation
-        </a>
-        <a
-          href={METHODOLOGY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg
-            border border-[#1E3A5F] hover:border-[#C4A55A]/40 text-[#6B7FA3]
-            hover:text-[#E8EDF5] text-sm font-medium transition-colors"
-        >
-          Download Methodology Paper
-        </a>
+    <div style={{
+      background: '#EBF1F8',
+      border: '1px solid #C7D9EE',
+      borderRadius: '6px',
+      padding: '24px 28px',
+      marginTop: '24px',
+    }}>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+
+        {/* Left: heading + body copy */}
+        <div style={{ flex: '1' }}>
+          <h3 style={{
+            fontFamily: 'var(--font-libre-baskerville), Georgia, serif',
+            fontSize: '18px',
+            fontWeight: 700,
+            color: '#0F1729',
+            lineHeight: 1.3,
+          }}>
+            Ready to Reduce Your Exposure?
+          </h3>
+          <p style={{
+            fontFamily: 'var(--font-dm-sans)',
+            fontSize: '12px',
+            color: '#3D5068',
+            lineHeight: 1.7,
+            marginTop: '8px',
+          }}>
+            Hitch Partners typically places CISOs and security leaders in ~62 days — roughly 32 days
+            faster than general search firms. Every day of vacancy carries measurable, compounding risk.
+          </p>
+        </div>
+
+        {/* Right: CTA buttons */}
+        <div className="flex flex-col items-start sm:items-end gap-2 sm:shrink-0">
+          <a
+            href={CONTACT_URL}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '10px 22px',
+              borderRadius: '4px',
+              background: '#0F1729',
+              color: '#FFFFFF',
+              fontFamily: 'var(--font-dm-sans)',
+              fontSize: '12px',
+              fontWeight: 600,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              transition: 'background 0.15s',
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#1E3A5F'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#0F1729'; }}
+          >
+            Schedule a Conversation
+          </a>
+          <a
+            href={METHODOLOGY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontFamily: 'var(--font-dm-sans)',
+              fontSize: '11px',
+              color: '#1D4ED8',
+              textDecoration: 'underline',
+              textUnderlineOffset: '2px',
+            }}
+          >
+            Download Methodology Paper →
+          </a>
+        </div>
+
       </div>
     </div>
   );

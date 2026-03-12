@@ -9,8 +9,8 @@ interface ScenarioCardsProps {
   daysVacant: number;
 }
 
-function Skeleton({ className = '' }: { className?: string }) {
-  return <div className={`skeleton-dark rounded animate-pulse ${className}`} />;
+function Skeleton({ style }: { style?: React.CSSProperties }) {
+  return <div className="skeleton-dark rounded animate-pulse" style={style} />;
 }
 
 interface CardProps {
@@ -34,15 +34,30 @@ function ScenarioCard({
 }: CardProps) {
   return (
     <div
-      className={`rounded-lg border p-5 flex flex-col gap-4 transition-all duration-300
-        ${isBreach
-          ? 'bg-red-950/20 border-red-800/40'
-          : 'bg-[#162040] border-[#1E3A5F]'}`}
+      style={{
+        background: isBreach ? '#FEF9F9' : '#FFFFFF',
+        border: isBreach ? '1px solid #FECACA' : '1px solid #DDE3EC',
+        borderTop: isBreach ? '3px solid #B91C1C' : '3px solid #0F1729',
+        borderRadius: '6px',
+        padding: '20px 22px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '14px',
+      }}
     >
       <div>
-        <p className="text-label mb-0.5">{title}</p>
+        <p style={{
+          fontFamily: 'var(--font-dm-sans)',
+          fontSize: '10px',
+          fontWeight: 600,
+          letterSpacing: '0.10em',
+          textTransform: 'uppercase',
+          color: isBreach ? '#B91C1C' : '#3D5068',
+        }}>
+          {title}
+        </p>
         {subtitle && (
-          <p className={`text-[11px] font-medium ${isBreach ? 'text-red-400' : 'text-[#6B7FA3]'}`}>
+          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', fontStyle: 'italic', color: '#B91C1C', marginTop: '2px' }}>
             {subtitle}
           </p>
         )}
@@ -50,32 +65,43 @@ function ScenarioCard({
 
       {/* Daily cost */}
       <div>
-        <p className="text-[10px] text-[#6B7FA3] mb-1 uppercase tracking-wide">Daily Exposure (P50)</p>
-        <p className={`text-data font-semibold text-xl tracking-tight transition-all duration-300
-          ${isBreach ? 'text-red-400' : 'text-[#F0C674]'}`}>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
+          Daily Exposure (P50)
+        </p>
+        <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '26px', fontWeight: 500, color: isBreach ? '#B91C1C' : '#0F1729', fontVariantNumeric: 'tabular-nums', lineHeight: 1.1 }}>
           {fmt(p50Daily)}
         </p>
-        <p className="text-data-sm text-[#6B7FA3] mt-1">
+        <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '11px', color: '#3D5068', marginTop: '4px', fontVariantNumeric: 'tabular-nums' }}>
           {fmt(p10Daily)}&thinsp;–&thinsp;{fmt(p90Daily)} per day
         </p>
       </div>
 
       {/* Total cost */}
-      <div className={`pt-3 border-t ${isBreach ? 'border-red-900/40' : 'border-[#1E3A5F]'}`}>
-        <p className="text-[10px] text-[#6B7FA3] mb-1 uppercase tracking-wide">Total Exposure (P50)</p>
-        <p className={`text-data font-semibold text-lg transition-all duration-300
-          ${isBreach ? 'text-red-400' : 'text-[#E8EDF5]'}`}>
+      <div style={{ paddingTop: '14px', borderTop: isBreach ? '1px solid #FECACA' : '1px solid #DDE3EC' }}>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
+          Total Exposure (P50)
+        </p>
+        <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '20px', fontWeight: 500, color: isBreach ? '#B91C1C' : '#0F1729', fontVariantNumeric: 'tabular-nums', lineHeight: 1.1 }}>
           {fmt(p50Total)}
         </p>
-        <p className="text-data-sm text-[#6B7FA3] mt-1">
+        <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '11px', color: '#3D5068', marginTop: '4px', fontVariantNumeric: 'tabular-nums' }}>
           {fmtCompact(p10Total)}&thinsp;–&thinsp;{fmtCompact(p90Total)} range
         </p>
         {deltaLabel && (
-          <p className="text-[11px] font-semibold text-red-400 mt-2">{deltaLabel}</p>
+          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: 500, color: '#B91C1C', marginTop: '8px' }}>
+            {deltaLabel}
+          </p>
         )}
       </div>
 
-      <p className="text-[10px] text-[#6B7FA3]/50 mt-auto font-mono">
+      <p style={{
+        fontFamily: 'var(--font-dm-sans)',
+        fontSize: '10px',
+        color: '#7A8FA6',
+        marginTop: 'auto',
+        paddingTop: '10px',
+        borderTop: isBreach ? '1px solid #FECACA' : '1px solid #DDE3EC',
+      }}>
         5,000 simulated outcomes
       </p>
     </div>
@@ -86,19 +112,19 @@ export default function ScenarioCards({ result, isRunning, daysVacant }: Scenari
   if (isRunning || !result) {
     return (
       <div className="grid grid-cols-2 gap-4">
-        <div className="rounded-lg border border-[#1E3A5F] bg-[#162040] p-5 space-y-4">
-          <Skeleton className="h-3 w-32" />
-          <Skeleton className="h-6 w-40" />
-          <Skeleton className="h-3 w-44" />
-          <div className="pt-3 border-t border-[#1E3A5F] space-y-2">
-            <Skeleton className="h-5 w-36" />
-            <Skeleton className="h-3 w-40" />
+        <div style={{ borderRadius: '6px', border: '1px solid #DDE3EC', borderTop: '3px solid #0F1729', background: '#FFFFFF', padding: '20px 22px' }} className="space-y-4">
+          <Skeleton style={{ height: '10px', width: '120px' }} />
+          <Skeleton style={{ height: '28px', width: '150px' }} />
+          <Skeleton style={{ height: '10px', width: '160px' }} />
+          <div style={{ paddingTop: '14px', borderTop: '1px solid #DDE3EC' }} className="space-y-2">
+            <Skeleton style={{ height: '20px', width: '130px' }} />
+            <Skeleton style={{ height: '10px', width: '140px' }} />
           </div>
         </div>
-        <div className="rounded-lg border border-red-800/30 bg-red-950/20 p-5 space-y-4">
-          <Skeleton className="h-3 w-32" />
-          <Skeleton className="h-6 w-40" />
-          <Skeleton className="h-3 w-44" />
+        <div style={{ borderRadius: '6px', border: '1px solid #FECACA', borderTop: '3px solid #B91C1C', background: '#FEF9F9', padding: '20px 22px' }} className="space-y-4">
+          <Skeleton style={{ height: '10px', width: '120px' }} />
+          <Skeleton style={{ height: '28px', width: '150px' }} />
+          <Skeleton style={{ height: '10px', width: '160px' }} />
         </div>
       </div>
     );

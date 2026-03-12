@@ -12,20 +12,21 @@ function Skeleton() {
   return (
     <div className="space-y-3">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="flex items-center gap-4">
-          <div className="w-40 h-3 skeleton-dark rounded animate-pulse" />
-          <div className="flex-1 h-2 skeleton-dark rounded animate-pulse" />
-          <div className="w-24 h-3 skeleton-dark rounded animate-pulse" />
+        <div key={i} className="flex items-center gap-4" style={{ padding: '14px 0', borderBottom: '1px solid #DDE3EC' }}>
+          <div style={{ width: '160px', height: '12px' }} className="skeleton-dark rounded animate-pulse" />
+          <div className="flex-1 skeleton-dark rounded animate-pulse" style={{ height: '4px' }} />
+          <div style={{ width: '100px', height: '12px' }} className="skeleton-dark rounded animate-pulse" />
         </div>
       ))}
     </div>
   );
 }
 
+// Institutional bar colors per component
 const COMPONENT_COLORS = {
-  breach:      { bar: 'bg-[#C4A55A]',   text: 'text-[#F0C674]' },
-  regulatory:  { bar: 'bg-[#2DD4BF]',   text: 'text-[#2DD4BF]' },
-  operational: { bar: 'bg-[#6B7FA3]',   text: 'text-[#6B7FA3]' },
+  breach:      { bar: '#0F1729' },  // navy
+  regulatory:  { bar: '#1D4ED8' },  // accent blue
+  operational: { bar: '#15803D' },  // green
 };
 
 const COMPONENT_LABELS: Record<string, (role: SecurityRole) => string> = {
@@ -42,28 +43,44 @@ interface RowProps {
   label: string;
   value: number;
   pct: number;
-  colors: { bar: string; text: string };
+  barColor: string;
+  isLast: boolean;
 }
 
-function Row({ label, value, pct, colors }: RowProps) {
+function Row({ label, value, pct, barColor, isLast }: RowProps) {
   return (
-    <div className="flex items-center gap-3 py-2.5 border-b border-[#1E3A5F]/40 last:border-0">
-      <div className="w-48 shrink-0">
-        <p className="text-sm text-[#E8EDF5]/80 leading-snug">{label}</p>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px',
+      padding: '14px 0',
+      borderBottom: isLast ? 'none' : '1px solid #DDE3EC',
+    }}>
+      <div style={{ width: '192px', flexShrink: 0 }}>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '12px', fontWeight: 500, color: '#1A2332', lineHeight: 1.3 }}>
+          {label}
+        </p>
       </div>
       <div className="flex-1">
-        <div className="h-1.5 bg-[#0A1628] rounded-full overflow-hidden">
+        <div style={{ height: '4px', background: '#EBF1F8', borderRadius: '2px', overflow: 'hidden' }}>
           <div
-            className={`h-full rounded-full transition-all duration-700 ${colors.bar}`}
-            style={{ width: `${Math.min(100, pct)}%` }}
+            style={{
+              height: '100%',
+              borderRadius: '2px',
+              background: barColor,
+              width: `${Math.min(100, pct)}%`,
+              transition: 'width 0.7s ease',
+            }}
           />
         </div>
       </div>
-      <div className="w-36 text-right shrink-0">
-        <span className={`font-mono text-sm font-semibold ${colors.text}`}>
+      <div style={{ width: '144px', textAlign: 'right', flexShrink: 0 }}>
+        <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '13px', fontWeight: 500, color: '#0F1729', fontVariantNumeric: 'tabular-nums' }}>
           {fmt(value)}
         </span>
-        <span className="text-[10px] text-[#6B7FA3] ml-1.5 font-mono">{pct.toFixed(0)}%</span>
+        <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '11px', color: '#7A8FA6', marginLeft: '6px', fontVariantNumeric: 'tabular-nums' }}>
+          {pct.toFixed(0)}%
+        </span>
       </div>
     </div>
   );
@@ -83,17 +100,16 @@ export default function ComponentBreakdown({ result, role }: ComponentBreakdownP
 
   return (
     <div>
-      <div className="divide-y-0">
-        {rows.map(({ key, value, pct }) => (
-          <Row
-            key={key}
-            label={COMPONENT_LABELS[key](role)}
-            value={value}
-            pct={pct}
-            colors={COMPONENT_COLORS[key as keyof typeof COMPONENT_COLORS]}
-          />
-        ))}
-      </div>
+      {rows.map(({ key, value, pct }, idx) => (
+        <Row
+          key={key}
+          label={COMPONENT_LABELS[key](role)}
+          value={value}
+          pct={pct}
+          barColor={COMPONENT_COLORS[key as keyof typeof COMPONENT_COLORS].bar}
+          isLast={idx === rows.length - 1}
+        />
+      ))}
     </div>
   );
 }

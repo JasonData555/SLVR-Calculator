@@ -20,26 +20,29 @@ export default function Home() {
   const { result, isRunning } = useSimulation(inputs);
 
   return (
-    <div className="min-h-screen bg-[#0A1628]">
+    <div className="min-h-screen bg-[#F7F9FB]">
 
-      {/* ── Page Header ── */}
+      {/* ── Page Header — navy bar, one dark element ── */}
       <header
-        className="sticky top-0 z-50 w-full border-b border-[#1E3A5F]"
-        style={{ background: '#080F1E' }}
+        className="sticky top-0 z-50 w-full"
+        style={{ background: '#0F1729', borderBottom: '1px solid rgba(255,255,255,0.08)', height: '48px' }}
       >
-        <div className="max-w-[1600px] mx-auto px-6 py-3 flex items-center justify-between">
+        <div className="max-w-[1600px] mx-auto h-full px-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-px h-4 bg-[#C4A55A]" aria-hidden />
-            <h1 className="text-[#E8EDF5] font-semibold text-sm leading-tight tracking-wide">
+            {/* Red vertical rule accent */}
+            <div style={{ width: '2px', height: '20px', background: '#B91C1C', flexShrink: 0 }} aria-hidden />
+            <h1
+              style={{ fontFamily: 'var(--font-libre-baskerville), Georgia, serif', fontSize: '16px', fontWeight: 400, color: '#FFFFFF', letterSpacing: '0.01em', lineHeight: 1.2 }}
+            >
               Security Leader Vacancy Risk Calculator
             </h1>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-[#6B7FA3] text-xs font-light tracking-widest uppercase">
+          <div className="flex items-center gap-2">
+            <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#6B8DB0', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               Powered by Hitch Partners
             </span>
-            <span className="text-[#1E3A5F] text-xs">·</span>
-            <span className="text-[#6B7FA3] text-[10px] font-mono">
+            <span style={{ color: '#3A5272', fontSize: '10px' }}>&nbsp;·&nbsp;</span>
+            <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: '#4A6B8C' }}>
               VRQM · 5,000 MC Iterations
             </span>
           </div>
@@ -50,62 +53,71 @@ export default function Home() {
       <div className="max-w-[1600px] mx-auto">
         <div className="lg:flex lg:h-[calc(100vh-48px)]">
 
-          {/* Left — Input Panel (40%, sticky) */}
+          {/* Left — Input Panel (fixed 380px, sticky) */}
           <div
-            className="lg:w-[40%] lg:shrink-0 lg:sticky lg:top-[48px] lg:h-[calc(100vh-48px)] lg:overflow-y-auto
-              border-b lg:border-b-0 lg:border-r border-[#1E3A5F] bg-[#0D1929]"
+            className="lg:w-[380px] lg:shrink-0 lg:sticky lg:top-[48px] lg:h-[calc(100vh-48px)] lg:overflow-y-auto
+              border-b lg:border-b-0 lg:border-r border-[#DDE3EC] bg-white"
           >
             <InputPanel inputs={inputs} onChange={handleChange} />
           </div>
 
-          {/* Right — Results Panel (60%, scrollable) */}
-          <div className="lg:flex-1 lg:overflow-y-auto bg-[#0A1628]">
+          {/* Right — Results Panel (flex-fill, scrollable) */}
+          <div className="lg:flex-1 lg:overflow-y-auto bg-[#F7F9FB]">
             <ResultsPanel result={result} isRunning={isRunning} inputs={inputs} />
 
             {/* Footer */}
-            <footer className="border-t border-[#1E3A5F] bg-[#080F1E] px-6 py-8 mt-2">
-              <div className="max-w-3xl space-y-5 text-xs text-[#6B7FA3] leading-relaxed">
-                <div>
-                  <p className="font-semibold text-[#E8EDF5]/60 mb-1 uppercase tracking-wide text-[10px]">
-                    Methodology
-                  </p>
-                  <p>
-                    Cost projections are risk-weighted estimates based on industry benchmarks,
-                    regulatory data, and statistical modeling. These represent potential financial
-                    impacts derived from empirical data across 600+ global organizations.
-                    Calculations utilize Hitch Partners&rsquo; proprietary VRQM (Vacancy Risk
-                    Quantification Model) methodology to model exponential risk acceleration during
-                    leadership gaps. Individual organizational outcomes will vary based on specific
-                    risk factors and security posture.
-                  </p>
+            <footer className="border-t border-[#DDE3EC] bg-white px-8 py-5 mt-2">
+              <div className="flex flex-col sm:flex-row gap-6 justify-between max-w-4xl">
+                <div className="space-y-4 flex-1">
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
+                      Methodology
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.6 }}>
+                      Cost projections are risk-weighted estimates based on industry benchmarks,
+                      regulatory data, and statistical modeling. These represent potential financial
+                      impacts derived from empirical data across 600+ global organizations.
+                      Calculations utilize Hitch Partners&rsquo; proprietary VRQM (Vacancy Risk
+                      Quantification Model) methodology to model exponential risk acceleration during
+                      leadership gaps. Individual organizational outcomes will vary based on specific
+                      risk factors and security posture.
+                    </p>
+                  </div>
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
+                      Data Sources
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.6 }}>
+                      Industry breach data sourced from IBM Cost of Data Breach Report 2025,
+                      Cyentia Information Risk Insights Study (IRIS 2025) statistical analysis,
+                      and established cybersecurity industry standards. Security leader time-to-fill
+                      benchmarks sourced from IANS Research / Artico Search CISO Hiring Study.
+                      Hitch Partners placement timeline reflects verified internal search performance data.
+                    </p>
+                  </div>
+                  <div>
+                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
+                      Disclaimer
+                    </p>
+                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.6 }}>
+                      These projections represent statistical estimates based on industry data,
+                      not guarantees of individual outcomes. Organizations should conduct their
+                      own risk assessment in consultation with qualified cybersecurity and legal
+                      professionals.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold text-[#E8EDF5]/60 mb-1 uppercase tracking-wide text-[10px]">
-                    Data Sources
+                <div className="sm:text-right sm:shrink-0 sm:max-w-xs">
+                  <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
+                    Citations
                   </p>
-                  <p>
-                    Industry breach data sourced from IBM Cost of Data Breach Report 2025,
-                    Cyentia Information Risk Insights Study (IRIS 2025) statistical analysis,
-                    and established cybersecurity industry standards. Security leader time-to-fill
-                    benchmarks sourced from IANS Research / Artico Search CISO Hiring Study.
-                    Hitch Partners placement timeline reflects verified internal search performance data.
+                  <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.8 }}>
+                    IBM Cost of Data Breach Report 2025&nbsp;·<br />
+                    Cyentia IRIS 2025&nbsp;·<br />
+                    IANS/Artico CISO Hiring Study
                   </p>
-                </div>
-                <div>
-                  <p className="font-semibold text-[#E8EDF5]/60 mb-1 uppercase tracking-wide text-[10px]">
-                    Disclaimer
-                  </p>
-                  <p>
-                    These projections represent statistical estimates based on industry data,
-                    not guarantees of individual outcomes. Organizations should conduct their
-                    own risk assessment in consultation with qualified cybersecurity and legal
-                    professionals.
-                  </p>
-                </div>
-                <div className="pt-4 border-t border-[#1E3A5F]">
-                  <p className="text-[#6B7FA3]/60 font-mono text-[10px]">
-                    &copy; {new Date().getFullYear()} Hitch Partners &nbsp;·&nbsp; All rights reserved &nbsp;·&nbsp;
-                    VRQM stochastic methodology with Monte Carlo simulation
+                  <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: '#7A8FA6', marginTop: '16px', opacity: 0.7 }}>
+                    &copy; {new Date().getFullYear()} Hitch Partners · VRQM stochastic methodology
                   </p>
                 </div>
               </div>

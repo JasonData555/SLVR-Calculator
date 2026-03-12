@@ -3,7 +3,6 @@
 import dynamic from 'next/dynamic';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import { Button } from '@/components/ui/button';
 import HeroMetricStrip from './blocks/HeroMetricStrip';
 import ScenarioCards from './blocks/ScenarioCards';
 import MonteCarloCallout from './blocks/MonteCarloCallout';
@@ -24,20 +23,25 @@ interface ResultsPanelProps {
   inputs: SimulationInputs;
 }
 
-/** Dark card container for result blocks */
+/** White card container for result blocks */
 function DataCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={`bg-[#111E35] border border-[#1E3A5F] rounded-lg p-5 ${className}`}>
+    <div
+      className={className}
+      style={{ background: '#FFFFFF', border: '1px solid #DDE3EC', borderRadius: '6px', padding: '20px 22px' }}
+    >
       {children}
     </div>
   );
 }
 
-/** Section label with flanking rules — McKinsey brief section markers */
+/** Institutional section label with flanking rules */
 function SectionDivider({ label }: { label: string }) {
   return (
     <div className="slvr-section-divider">
-      <span className="text-label whitespace-nowrap">{label}</span>
+      <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7A8FA6', whiteSpace: 'nowrap' }}>
+        {label}
+      </span>
     </div>
   );
 }
@@ -51,36 +55,77 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
   });
 
   return (
-    <div className="p-6 space-y-5">
+    <div style={{ padding: '28px 32px' }} className="space-y-5">
 
-      {/* ── Status bar ── */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-            isRunning ? 'bg-[#C4A55A] animate-pulse' : result ? 'bg-[#2DD4BF]' : 'bg-[#1E3A5F]'
-          }`} />
-          <p className="font-mono text-[11px] text-[#6B7FA3] uppercase tracking-widest">
+      {/* ── Status bar — slim 36px institutional bar ── */}
+      <div style={{
+        height: '36px',
+        background: '#FFFFFF',
+        borderBottom: '1px solid #DDE3EC',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '16px',
+        marginBottom: '4px',
+        marginLeft: '-32px',
+        marginRight: '-32px',
+        marginTop: '-28px',
+        paddingLeft: '32px',
+        paddingRight: '32px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span
+            style={{
+              width: '6px',
+              height: '6px',
+              borderRadius: '50%',
+              flexShrink: 0,
+              background: isRunning ? '#B45309' : result ? '#15803D' : '#DDE3EC',
+              animation: isRunning ? 'pulse 2s cubic-bezier(0.4,0,0.6,1) infinite' : 'none',
+            }}
+          />
+          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', color: '#3D5068' }}>
             {isRunning
-              ? 'Computing 5,000 scenarios...'
+              ? 'Running simulation...'
               : result
                 ? '5,000 simulations complete'
                 : 'Initializing...'}
           </p>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
+
+        {/* Risk Report button */}
+        <button
           onClick={() => handlePrint()}
           disabled={!result || isRunning}
-          className="text-[11px] shrink-0 border-[#1E3A5F] text-[#6B7FA3] hover:text-[#E8EDF5]
-            hover:border-[#C4A55A]/50 hover:bg-[#162040] transition-colors uppercase tracking-wide"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '6px 14px',
+            borderRadius: '3px',
+            background: !result || isRunning ? '#EBF1F8' : '#0F1729',
+            color: !result || isRunning ? '#7A8FA6' : '#FFFFFF',
+            fontFamily: 'var(--font-dm-sans)',
+            fontSize: '11px',
+            fontWeight: 500,
+            letterSpacing: '0.06em',
+            border: 'none',
+            cursor: !result || isRunning ? 'not-allowed' : 'pointer',
+            transition: 'background 0.15s',
+          }}
+          onMouseEnter={(e) => {
+            if (result && !isRunning) (e.currentTarget as HTMLButtonElement).style.background = '#1E3A5F';
+          }}
+          onMouseLeave={(e) => {
+            if (result && !isRunning) (e.currentTarget as HTMLButtonElement).style.background = '#0F1729';
+          }}
         >
-          <svg className="w-3 h-3 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          {/* Download icon */}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
           Risk Report
-        </Button>
+        </button>
       </div>
 
       {/* ════════════════════════════════════════════════
@@ -91,9 +136,11 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
       {/* Hero metric — P50 daily cost, risk level, total exposure */}
       <HeroMetricStrip result={result} isRunning={isRunning} daysVacant={inputs.daysVacant} />
 
-      {/* P10 / P50 / P90 scenario cards */}
+      {/* Scenario comparison cards */}
       <div>
-        <p className="text-label mb-3">Scenario Comparison · No Breach vs. Breach During Vacancy</p>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '12px' }}>
+          Scenario Comparison · No Breach vs. Breach During Vacancy
+        </p>
         <ScenarioCards
           result={result}
           isRunning={isRunning}
@@ -106,12 +153,14 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
       ════════════════════════════════════════════════ */}
       <SectionDivider label="Risk Decomposition" />
 
-      {/* Monte Carlo context — compressed to a single callout line */}
+      {/* Monte Carlo context callout */}
       <MonteCarloCallout result={result} />
 
       {/* Component breakdown */}
       <DataCard>
-        <p className="text-label mb-4">Cost Component Breakdown · Daily Mean (No-Breach Scenario)</p>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '16px' }}>
+          Cost Component Breakdown · Daily Mean (No-Breach Scenario)
+        </p>
         <ComponentBreakdown result={result} role={inputs.role} />
       </DataCard>
 
@@ -125,10 +174,17 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
         </DataCard>
       ) : (
         <DataCard>
-          <div className="h-48 flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-6 h-6 border-2 border-[#C4A55A] border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-              <p className="text-[11px] text-[#6B7FA3]">Building cumulative chart...</p>
+          <div style={{ height: '192px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ textAlign: 'center' }}>
+              <div style={{
+                width: '20px', height: '20px', borderRadius: '50%',
+                border: '2px solid #0F1729', borderTopColor: 'transparent',
+                margin: '0 auto 12px',
+                animation: 'spin 0.8s linear infinite',
+              }} />
+              <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', color: '#7A8FA6' }}>
+                Building cumulative chart...
+              </p>
             </div>
           </div>
         </DataCard>

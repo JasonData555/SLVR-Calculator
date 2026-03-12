@@ -58,10 +58,18 @@ function CustomTooltip({
   const wb = payload.find((p) => p.name === 'wb')?.value ?? 0;
 
   return (
-    <div className="bg-[#162040] border border-[#1E3A5F] rounded-lg shadow-xl p-2.5 text-xs">
-      <p className="font-mono text-[#6B7FA3] mb-1">{formatX(label)}</p>
-      <p className="text-[#C4A55A] font-mono">No Breach: <strong>{nb}</strong></p>
-      <p className="text-red-400 font-mono">With Breach: <strong>{wb}</strong></p>
+    <div style={{
+      background: '#FFFFFF',
+      border: '1px solid #DDE3EC',
+      borderRadius: '4px',
+      padding: '8px 10px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+      fontFamily: 'var(--font-dm-mono)',
+      fontSize: '11px',
+    }}>
+      <p style={{ color: '#7A8FA6', marginBottom: '4px' }}>{formatX(label)}</p>
+      <p style={{ color: '#0F1729' }}>No Breach: <strong>{nb}</strong></p>
+      <p style={{ color: '#B91C1C' }}>With Breach: <strong>{wb}</strong></p>
     </div>
   );
 }
@@ -77,50 +85,52 @@ export default function HistogramChart({ noBreachIterations, breachIterations }:
   const nbP50 = nbSorted[Math.floor(nbSorted.length / 2)];
   const wbP50 = wbSorted[Math.floor(wbSorted.length / 2)];
 
-  const gridColor = '#1E3A5F';
-  const axisColor = '#6B7FA3';
+  const gridColor = '#EBF1F8';
+  const axisColor = '#7A8FA6';
   const monoFont  = 'var(--font-dm-mono)';
 
   return (
     <div>
-      <div className="mb-4">
-        <h3 className="text-sm font-semibold text-[#E8EDF5]">Distribution of 5,000 Simulated Outcomes</h3>
-        <p className="text-[11px] text-[#6B7FA3] mt-0.5">
-          Gold = No breach &nbsp;·&nbsp; Red = Breach during vacancy
+      <div style={{ marginBottom: '16px' }}>
+        <h3 style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '12px', fontWeight: 500, color: '#1A2332' }}>
+          Distribution of 5,000 Simulated Outcomes
+        </h3>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', color: '#7A8FA6', marginTop: '2px' }}>
+          Navy = No breach &nbsp;·&nbsp; Red = Breach during vacancy
         </p>
       </div>
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={buckets} margin={{ top: 5, right: 20, left: 52, bottom: 15 }} barCategoryGap={1}>
-          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} strokeOpacity={0.5} vertical={false} />
+          <CartesianGrid strokeDasharray="3 3" stroke={gridColor} strokeOpacity={1} vertical={false} />
           <XAxis
             dataKey="xLabel"
             tickFormatter={formatX}
             tick={{ fontSize: 9, fill: axisColor, fontFamily: monoFont }}
             tickCount={6}
-            label={{ value: 'Total Vacancy Cost', position: 'insideBottom', offset: -10, fontSize: 9, fill: axisColor }}
+            label={{ value: 'Total Vacancy Cost', position: 'insideBottom', offset: -10, fontSize: 9, fill: axisColor, fontFamily: monoFont }}
             stroke={gridColor}
           />
           <YAxis
-            tick={{ fontSize: 9, fill: axisColor }}
+            tick={{ fontSize: 9, fill: axisColor, fontFamily: monoFont }}
             label={{ value: 'Frequency', angle: -90, position: 'insideLeft', offset: 15, fontSize: 9, fill: axisColor }}
             stroke={gridColor}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Bar dataKey="nb" fill="#C4A55A" opacity={0.80} name="nb" />
-          <Bar dataKey="wb" fill="#EF4444" opacity={0.55} name="wb" />
+          <Bar dataKey="nb" fill="#0F1729" opacity={0.70} name="nb" />
+          <Bar dataKey="wb" fill="#B91C1C" opacity={0.50} name="wb" />
           <ReferenceLine
             x={nbP50}
-            stroke="#C4A55A"
+            stroke="#0F1729"
             strokeDasharray="4 3"
             strokeWidth={1.5}
-            label={{ value: `P50: ${fmt(nbP50)}`, position: 'top', fontSize: 8, fill: '#C4A55A' }}
+            label={{ value: `P50: ${fmt(nbP50)}`, position: 'top', fontSize: 8, fill: '#0F1729', fontFamily: monoFont }}
           />
           <ReferenceLine
             x={wbP50}
-            stroke="#EF4444"
+            stroke="#B91C1C"
             strokeDasharray="4 3"
             strokeWidth={1.5}
-            label={{ value: `P50: ${fmt(wbP50)}`, position: 'top', fontSize: 8, fill: '#EF4444' }}
+            label={{ value: `P50: ${fmt(wbP50)}`, position: 'top', fontSize: 8, fill: '#B91C1C', fontFamily: monoFont }}
           />
         </BarChart>
       </ResponsiveContainer>

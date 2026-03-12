@@ -16,14 +16,30 @@ function MetricRow({
   isHitch?: boolean;
 }) {
   return (
-    <div className={`flex items-center justify-between py-2.5 border-b border-[#1E3A5F]/50 last:border-0
-      ${isHitch ? 'bg-[#2DD4BF]/5 -mx-4 px-4 rounded' : ''}`}>
-      <p className={`text-sm ${highlight ? 'text-[#E8EDF5] font-medium' : isHitch ? 'text-[#2DD4BF]' : 'text-[#6B7FA3]'}`}>
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      borderBottom: '1px solid #DDE3EC',
+      background: isHitch ? '#F0FDF4' : 'transparent',
+      margin: isHitch ? '0 -22px' : '0',
+      padding: isHitch ? '10px 22px' : '10px 0',
+    }}>
+      <p style={{
+        fontFamily: 'var(--font-dm-sans)',
+        fontSize: '12px',
+        color: isHitch ? '#15803D' : highlight ? '#1A2332' : '#3D5068',
+        fontWeight: isHitch || highlight ? 500 : 400,
+      }}>
         {label}
       </p>
-      <p className={`font-mono text-sm font-semibold tabular-nums ${
-        highlight ? 'text-[#2DD4BF]' : isHitch ? 'text-[#2DD4BF]' : 'text-[#E8EDF5]'
-      }`}>
+      <p style={{
+        fontFamily: 'var(--font-dm-mono)',
+        fontSize: '13px',
+        fontWeight: 500,
+        color: isHitch ? '#15803D' : highlight ? '#1D4ED8' : '#0F1729',
+        fontVariantNumeric: 'tabular-nums',
+      }}>
         {highlight ? `−${fmt(value)}` : fmt(value)}
       </p>
     </div>
@@ -32,11 +48,11 @@ function MetricRow({
 
 function Skeleton() {
   return (
-    <div className="bg-[#0D1929] border border-[#1E3A5F] rounded-lg p-6 space-y-3">
+    <div style={{ background: '#FFFFFF', border: '1px solid #DDE3EC', borderRadius: '6px', padding: '20px 22px' }} className="space-y-3">
       {[1, 2, 3, 4].map((i) => (
         <div key={i} className="flex justify-between">
-          <div className="h-4 w-48 skeleton-dark rounded animate-pulse" />
-          <div className="h-4 w-24 skeleton-dark rounded animate-pulse" />
+          <div style={{ height: '14px', width: '192px' }} className="skeleton-dark rounded animate-pulse" />
+          <div style={{ height: '14px', width: '96px' }} className="skeleton-dark rounded animate-pulse" />
         </div>
       ))}
     </div>
@@ -49,43 +65,31 @@ export default function SearchROICard({ result }: SearchROICardProps) {
   const { searchROI } = result;
 
   return (
-    <div className="bg-[#0D1929] border border-[#1E3A5F] rounded-lg p-6">
-      <div className="mb-5">
-        <h3 className="text-[#E8EDF5] font-semibold text-base">The Cost of Every Extra Day</h3>
-        <p className="text-[#6B7FA3] text-xs mt-0.5">
+    <div style={{ background: '#FFFFFF', border: '1px solid #DDE3EC', borderRadius: '6px', padding: '20px 22px' }}>
+      <div style={{ marginBottom: '16px' }}>
+        <h3 style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '13px', fontWeight: 500, color: '#1A2332' }}>
+          The Cost of Every Extra Day
+        </h3>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', color: '#7A8FA6', marginTop: '2px' }}>
           Risk exposure by search duration · P50 daily vacancy cost
         </p>
       </div>
 
       <div>
-        <MetricRow
-          label="Industry typical search (~127 days)"
-          value={searchROI.industryExposure}
-        />
-        <MetricRow
-          label="General search firms (~94 days)"
-          value={searchROI.generalExposure}
-        />
-        <MetricRow
-          label="Hitch Partners (~62 days)"
-          value={searchROI.hitchExposure}
-          isHitch
-        />
-        <MetricRow
-          label="Estimated risk reduction"
-          value={searchROI.netRiskReduction}
-          highlight
-        />
+        <MetricRow label="Industry typical search (~127 days)" value={searchROI.industryExposure} />
+        <MetricRow label="General search firms (~94 days)" value={searchROI.generalExposure} />
+        <MetricRow label="Hitch Partners (~62 days)" value={searchROI.hitchExposure} isHitch />
+        <MetricRow label="Estimated risk reduction" value={searchROI.netRiskReduction} highlight />
       </div>
 
-      <div className="mt-5 pt-4 border-t border-[#1E3A5F]/50">
-        <div className="flex items-center gap-2 mb-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#2DD4BF]" />
-          <p className="text-xs font-semibold text-[#2DD4BF]">
+      <div style={{ marginTop: '16px', paddingTop: '14px', borderTop: '1px solid #DDE3EC' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#15803D', flexShrink: 0 }} />
+          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: 600, color: '#15803D' }}>
             Search ROI vs. $75K placement fee: {searchROI.roiRatio}
           </p>
         </div>
-        <p className="text-[10px] text-[#6B7FA3]/60 leading-relaxed font-mono">
+        <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.5 }}>
           Hitch Partners placement timeline reflects verified internal search performance data.
           Industry benchmarks per IANS Research / Artico Search CISO Hiring Study.
           Placement success rate: 91% vs. 73% industry average.

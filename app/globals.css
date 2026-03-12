@@ -9,6 +9,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-dm-sans);
   --font-mono: var(--font-dm-mono);
+  --font-serif: var(--font-libre-baskerville);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -46,106 +47,83 @@
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
 
-  /* SLVR custom color tokens */
-  --color-slvr-gold: var(--slvr-gold);
-  --color-slvr-gold-dim: var(--slvr-gold-dim);
-  --color-slvr-teal: var(--slvr-teal);
-  --color-slvr-navy: var(--slvr-navy);
-  --color-slvr-surface: var(--slvr-surface);
-  --color-slvr-card: var(--slvr-card-bg);
-  --color-slvr-edge: var(--slvr-border);
-  --color-slvr-muted: var(--slvr-muted-text);
-  --color-slvr-text: var(--slvr-text);
+  /* SLVR institutional brand tokens */
+  --color-navy: var(--navy);
+  --color-navy-mid: var(--navy-mid);
+  --color-navy-light: var(--navy-light);
+  --color-navy-faint: var(--navy-faint);
+  --color-paper: var(--paper);
+  --color-rule: var(--rule);
+  --color-text-primary: var(--text-primary);
+  --color-text-mid: var(--text-mid);
+  --color-text-muted: var(--text-muted);
+  --color-green: var(--green);
+  --color-green-bg: var(--green-bg);
+  --color-amber: var(--amber);
+  --color-amber-bg: var(--amber-bg);
+  --color-red: var(--red);
+  --color-red-bg: var(--red-bg);
+  --color-accent-blue: var(--accent);
 }
 
-/* ─── Dark Navy Theme (default) ──────────────────────────────────────────── */
+/* ─── Light Institutional Theme ─────────────────────────────────────────── */
 :root {
-  /* shadcn/ui semantic tokens — mapped to SLVR dark palette */
-  --background:           oklch(0.14 0.050 259);  /* #0A1628 deep navy  */
-  --foreground:           oklch(0.94 0.015 258);  /* #E8EDF5 cool white */
-  --card:                 oklch(0.19 0.060 257);  /* #162040 mid navy   */
-  --card-foreground:      oklch(0.94 0.015 258);
-  --popover:              oklch(0.19 0.060 257);
-  --popover-foreground:   oklch(0.94 0.015 258);
-  --primary:              oklch(0.72 0.085 74);   /* #C4A55A exec gold  */
-  --primary-foreground:   oklch(0.14 0.050 259);
-  --secondary:            oklch(0.17 0.050 257);  /* #111E35 surface    */
-  --secondary-foreground: oklch(0.94 0.015 258);
-  --muted:                oklch(0.17 0.050 257);
-  --muted-foreground:     oklch(0.57 0.055 253);  /* #6B7FA3 blue-gray  */
-  --accent:               oklch(0.28 0.070 250);  /* #1E3A5F accent     */
-  --accent-foreground:    oklch(0.94 0.015 258);
-  --destructive:          oklch(0.63 0.220 27);   /* #EF4444 red        */
-  --border:               oklch(0.28 0.070 250);  /* #1E3A5F            */
-  --input:                oklch(0.28 0.070 250);
-  --ring:                 oklch(0.72 0.085 74);   /* gold ring          */
+  /* shadcn/ui semantic tokens — mapped to institutional light palette */
+  --background:           #F7F9FB;   /* warm paper */
+  --foreground:           #1A2332;   /* primary text */
+  --card:                 #FFFFFF;   /* card surfaces */
+  --card-foreground:      #1A2332;
+  --popover:              #FFFFFF;
+  --popover-foreground:   #1A2332;
+  --primary:              #0F1729;   /* navy */
+  --primary-foreground:   #FFFFFF;
+  --secondary:            #F5F8FC;
+  --secondary-foreground: #1A2332;
+  --muted:                #F5F8FC;
+  --muted-foreground:     #7A8FA6;
+  --accent:               #1D4ED8;   /* accent blue */
+  --accent-foreground:    #FFFFFF;
+  --destructive:          #B91C1C;   /* institutional red */
+  --border:               #DDE3EC;
+  --input:                #DDE3EC;
+  --ring:                 #1D4ED8;
 
-  /* Chart palette */
-  --chart-1: oklch(0.72 0.085 74);   /* gold   */
-  --chart-2: oklch(0.83 0.115 181);  /* teal   */
-  --chart-3: oklch(0.63 0.220 27);   /* red    */
-  --chart-4: oklch(0.57 0.055 253);  /* slate  */
-  --chart-5: oklch(0.55 0.160 148);  /* green  */
+  /* Chart palette — institutional semantic colors */
+  --chart-1: #0F1729;   /* navy — primary series */
+  --chart-2: #1D4ED8;   /* accent blue */
+  --chart-3: #B91C1C;   /* red */
+  --chart-4: #B45309;   /* amber */
+  --chart-5: #15803D;   /* green */
 
-  --radius: 0.5rem;
+  --radius: 0.375rem;   /* 6px base — precise, not rounded */
 
   /* Sidebar */
-  --sidebar:                  oklch(0.17 0.050 257);
-  --sidebar-foreground:       oklch(0.94 0.015 258);
-  --sidebar-primary:          oklch(0.72 0.085 74);
-  --sidebar-primary-foreground: oklch(0.14 0.050 259);
-  --sidebar-accent:           oklch(0.28 0.070 250);
-  --sidebar-accent-foreground: oklch(0.94 0.015 258);
-  --sidebar-border:           oklch(0.28 0.070 250);
-  --sidebar-ring:             oklch(0.72 0.085 74);
+  --sidebar:                  #FFFFFF;
+  --sidebar-foreground:       #1A2332;
+  --sidebar-primary:          #0F1729;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent:           #EBF1F8;
+  --sidebar-accent-foreground: #1A2332;
+  --sidebar-border:           #DDE3EC;
+  --sidebar-ring:             #1D4ED8;
 
-  /* ── SLVR brand custom properties (hex for component use) ── */
-  --slvr-navy:       #0A1628;
-  --slvr-surface:    #111E35;
-  --slvr-card-bg:    #162040;
-  --slvr-border:     #1E3A5F;
-  --slvr-gold:       #C4A55A;
-  --slvr-gold-dim:   #F0C674;
-  --slvr-teal:       #2DD4BF;
-  --slvr-text:       #E8EDF5;
-  --slvr-muted-text: #6B7FA3;
-  --slvr-danger:     #EF4444;
-  --slvr-green:      #2DD4BF;
-}
-
-/* ─── Legacy .dark class (unused, kept for future toggle) ──────────────── */
-.dark {
-  --background:           oklch(0.14 0.050 259);
-  --foreground:           oklch(0.94 0.015 258);
-  --card:                 oklch(0.19 0.060 257);
-  --card-foreground:      oklch(0.94 0.015 258);
-  --popover:              oklch(0.19 0.060 257);
-  --popover-foreground:   oklch(0.94 0.015 258);
-  --primary:              oklch(0.72 0.085 74);
-  --primary-foreground:   oklch(0.14 0.050 259);
-  --secondary:            oklch(0.17 0.050 257);
-  --secondary-foreground: oklch(0.94 0.015 258);
-  --muted:                oklch(0.17 0.050 257);
-  --muted-foreground:     oklch(0.57 0.055 253);
-  --accent:               oklch(0.28 0.070 250);
-  --accent-foreground:    oklch(0.94 0.015 258);
-  --destructive:          oklch(0.63 0.220 27);
-  --border:               oklch(0.28 0.070 250);
-  --input:                oklch(0.28 0.070 250);
-  --ring:                 oklch(0.72 0.085 74);
-  --chart-1: oklch(0.72 0.085 74);
-  --chart-2: oklch(0.83 0.115 181);
-  --chart-3: oklch(0.63 0.220 27);
-  --chart-4: oklch(0.57 0.055 253);
-  --chart-5: oklch(0.55 0.160 148);
-  --sidebar:                  oklch(0.17 0.050 257);
-  --sidebar-foreground:       oklch(0.94 0.015 258);
-  --sidebar-primary:          oklch(0.72 0.085 74);
-  --sidebar-primary-foreground: oklch(0.14 0.050 259);
-  --sidebar-accent:           oklch(0.28 0.070 250);
-  --sidebar-accent-foreground: oklch(0.94 0.015 258);
-  --sidebar-border:           oklch(0.28 0.070 250);
-  --sidebar-ring:             oklch(0.72 0.085 74);
+  /* ── SLVR institutional brand properties (hex) ── */
+  --navy:           #0F1729;
+  --navy-mid:       #1E3A5F;
+  --navy-light:     #EBF1F8;
+  --navy-faint:     #F5F8FC;
+  --white:          #FFFFFF;
+  --paper:          #F7F9FB;
+  --rule:           #DDE3EC;
+  --text-primary:   #1A2332;
+  --text-mid:       #3D5068;
+  --text-muted:     #7A8FA6;
+  --green:          #15803D;
+  --green-bg:       #F0FDF4;
+  --amber:          #B45309;
+  --amber-bg:       #FFFBEB;
+  --red:            #B91C1C;
+  --red-bg:         #FEF2F2;
 }
 
 @layer base {
@@ -162,17 +140,25 @@
 
 /* ─── SLVR Typography Scale ──────────────────────────────────────────────── */
 @layer utilities {
-  /* Display: hero metric number — 52–60px DM Mono, gold */
+  /* Display: hero metric number — 48px DM Mono, navy */
   .text-display {
     font-family: var(--font-dm-mono);
-    font-size: clamp(2.75rem, 5vw, 3.5rem);
-    font-weight: 600;
+    font-size: 3rem;
+    font-weight: 500;
     line-height: 1;
     letter-spacing: -0.01em;
     font-variant-numeric: tabular-nums;
+    color: #0F1729;
   }
 
-  /* Data: P10/P50/P90 figures — 16–20px DM Mono */
+  /* Serif display: section headings, CTA headline */
+  .text-serif-display {
+    font-family: var(--font-libre-baskerville), Georgia, serif;
+    font-weight: 700;
+    color: #0F1729;
+  }
+
+  /* Data: P10/P50/P90 figures — 16px DM Mono */
   .text-data {
     font-family: var(--font-dm-mono);
     font-size: 1rem;
@@ -187,14 +173,14 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Section label: 11px uppercase tracking */
+  /* Section label: 9px DM Sans, muted, uppercase, tracked */
   .text-label {
     font-family: var(--font-dm-sans);
-    font-size: 0.6875rem;
+    font-size: 0.5625rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--slvr-muted-text);
+    letter-spacing: 0.14em;
+    color: #7A8FA6;
   }
 
   /* Section divider line */
@@ -210,22 +196,20 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: var(--slvr-border);
+    background: #DDE3EC;
   }
 
-  /* Skeleton for dark theme */
-  .skeleton-dark {
-    background: var(--slvr-border);
+  /* Skeleton for light theme */
+  .skeleton-light {
+    background: #EBF1F8;
     border-radius: 0.25rem;
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
-  /* Subtle high-risk pulse */
-  @keyframes pulse-subtle {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.85; }
-  }
-  .animate-pulse-subtle {
-    animation: pulse-subtle 2.5s ease-in-out infinite;
+  /* Legacy alias — kept so existing components don't break */
+  .skeleton-dark {
+    background: #EBF1F8;
+    border-radius: 0.25rem;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 }
