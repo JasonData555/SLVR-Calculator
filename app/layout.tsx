@@ -26,6 +26,19 @@ export const metadata: Metadata = {
   title: "Security Leader Vacancy Risk Calculator | Hitch Partners",
   description:
     "Quantify the financial risk of vacant cybersecurity leadership positions. Monte Carlo simulation powered by IBM & Cyentia data.",
+  openGraph: {
+    title: "Security Leader Vacancy Risk Calculator | Hitch Partners",
+    description:
+      "Quantify the financial risk of a vacant CISO or security leader position. Monte Carlo simulation powered by IBM & Cyentia data.",
+    type: "website",
+    siteName: "Hitch Partners",
+  },
+  twitter: {
+    card: "summary",
+    title: "Security Leader Vacancy Risk Calculator | Hitch Partners",
+    description:
+      "Quantify the financial risk of a vacant CISO or security leader position. Monte Carlo simulation powered by IBM & Cyentia data.",
+  },
 };
 
 export default function RootLayout({

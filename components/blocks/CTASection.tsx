@@ -1,8 +1,8 @@
 'use client';
 
-// [PLACEHOLDER]: Replace with live URLs before launch
-const CONTACT_URL = '#contact';
-const METHODOLOGY_URL = '#methodology';
+// [PLACEHOLDER]: Replace with final Hitch Partners URLs before launch
+const CONTACT_URL = 'https://hitchpartners.com';
+const METHODOLOGY_URL = 'https://hitchpartners.com';
 
 export default function CTASection() {
   return (
