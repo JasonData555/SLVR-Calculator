@@ -93,10 +93,10 @@ function SliderInput({
             style={{
               fontFamily: 'var(--font-dm-mono)',
               fontSize: '13px',
-              textAlign: 'right',
+              textAlign: 'left',
               border: '1px solid #DDE3EC',
               borderRadius: '4px',
-              padding: prefix ? '5px 6px 5px 16px' : suffix ? '5px 22px 5px 6px' : '5px 6px',
+              padding: prefix ? '5px 6px 5px 16px' : suffix ? '5px 8px 5px 8px' : '5px 8px',
               background: '#FFFFFF',
               color: '#1A2332',
             }}

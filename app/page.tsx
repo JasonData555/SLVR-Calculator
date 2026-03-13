@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import Image from 'next/image';
 import InputPanel from '@/components/InputPanel';
 import ResultsPanel from '@/components/ResultsPanel';
 import { useSimulation } from '@/hooks/useSimulation';
@@ -37,10 +38,15 @@ export default function Home() {
               Security Leader Vacancy Risk Calculator
             </h1>
           </div>
-          <div className="flex items-center gap-2">
-            <span style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#6B8DB0', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-              Powered by Hitch Partners
-            </span>
+          <div className="flex items-center gap-3">
+            <Image
+              src="/hitch-partners-logo.png"
+              alt="Hitch Partners"
+              height={20}
+              width={68}
+              style={{ objectFit: 'contain', opacity: 0.85 }}
+              priority
+            />
             <span style={{ color: '#3A5272', fontSize: '10px' }}>&nbsp;·&nbsp;</span>
             <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: '#4A6B8C' }}>
               VRQM · 5,000 MC Iterations

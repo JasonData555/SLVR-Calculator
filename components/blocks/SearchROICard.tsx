@@ -81,20 +81,6 @@ export default function SearchROICard({ result }: SearchROICardProps) {
         <MetricRow label="Hitch Partners (~62 days)" value={searchROI.hitchExposure} isHitch />
         <MetricRow label="Estimated risk reduction" value={searchROI.netRiskReduction} highlight />
       </div>
-
-      <div style={{ marginTop: '16px', paddingTop: '14px', borderTop: '1px solid #DDE3EC' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#15803D', flexShrink: 0 }} />
-          <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: 600, color: '#15803D' }}>
-            Search ROI vs. $75K placement fee: {searchROI.roiRatio}
-          </p>
-        </div>
-        <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.5 }}>
-          Hitch Partners placement timeline reflects verified internal search performance data.
-          Industry benchmarks per IANS Research / Artico Search CISO Hiring Study.
-          Placement success rate: 91% vs. 73% industry average.
-        </p>
-      </div>
     </div>
   );
 }
