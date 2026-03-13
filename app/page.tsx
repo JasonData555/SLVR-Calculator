@@ -23,15 +23,21 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#F7F9FB]">
 
-      {/* ── Page Header — navy bar, one dark element ── */}
+      {/* ── Page Header — steel blue bar ── */}
       <header
         className="sticky top-0 z-50 w-full"
-        style={{ background: '#0F1729', borderBottom: '1px solid rgba(255,255,255,0.08)', height: '48px' }}
+        style={{ background: '#5B7C99', borderBottom: '1px solid rgba(255,255,255,0.12)', height: '48px' }}
       >
         <div className="max-w-[1600px] mx-auto h-full px-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            {/* Red vertical rule accent */}
-            <div style={{ width: '2px', height: '20px', background: '#B91C1C', flexShrink: 0 }} aria-hidden />
+          <div className="flex items-center gap-4">
+            <Image
+              src="/hitch-partners-logo.png"
+              alt="Hitch Partners"
+              height={24}
+              width={80}
+              style={{ objectFit: 'contain', opacity: 1 }}
+              priority
+            />
             <h1
               style={{ fontFamily: 'var(--font-libre-baskerville), Georgia, serif', fontSize: '16px', fontWeight: 400, color: '#FFFFFF', letterSpacing: '0.01em', lineHeight: 1.2 }}
             >
@@ -39,16 +45,7 @@ export default function Home() {
             </h1>
           </div>
           <div className="flex items-center gap-3">
-            <Image
-              src="/hitch-partners-logo.png"
-              alt="Hitch Partners"
-              height={20}
-              width={68}
-              style={{ objectFit: 'contain', opacity: 0.85 }}
-              priority
-            />
-            <span style={{ color: '#3A5272', fontSize: '10px' }}>&nbsp;·&nbsp;</span>
-            <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: '#4A6B8C' }}>
+            <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: 'rgba(255,255,255,0.65)' }}>
               VRQM · 5,000 MC Iterations
             </span>
           </div>

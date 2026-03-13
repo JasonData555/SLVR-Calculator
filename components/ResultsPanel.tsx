@@ -103,7 +103,7 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
             gap: '6px',
             padding: '6px 14px',
             borderRadius: '3px',
-            background: !result || isRunning ? '#EBF1F8' : '#0F1729',
+            background: !result || isRunning ? '#EBF1F8' : '#5B7C99',
             color: !result || isRunning ? '#7A8FA6' : '#FFFFFF',
             fontFamily: 'var(--font-dm-sans)',
             fontSize: '11px',
@@ -114,10 +114,10 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
             transition: 'background 0.15s',
           }}
           onMouseEnter={(e) => {
-            if (result && !isRunning) (e.currentTarget as HTMLButtonElement).style.background = '#1E3A5F';
+            if (result && !isRunning) (e.currentTarget as HTMLButtonElement).style.background = '#4A6B88';
           }}
           onMouseLeave={(e) => {
-            if (result && !isRunning) (e.currentTarget as HTMLButtonElement).style.background = '#0F1729';
+            if (result && !isRunning) (e.currentTarget as HTMLButtonElement).style.background = '#5B7C99';
           }}
         >
           {/* Download icon */}

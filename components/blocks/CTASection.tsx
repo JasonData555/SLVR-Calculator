@@ -48,7 +48,7 @@ export default function CTASection() {
               justifyContent: 'center',
               padding: '10px 22px',
               borderRadius: '4px',
-              background: '#0F1729',
+              background: '#5B7C99',
               color: '#FFFFFF',
               fontFamily: 'var(--font-dm-sans)',
               fontSize: '12px',
@@ -58,8 +58,8 @@ export default function CTASection() {
               textDecoration: 'none',
               transition: 'background 0.15s',
             }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#1E3A5F'; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#0F1729'; }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#4A6B88'; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = '#5B7C99'; }}
           >
             Schedule a Conversation
           </a>
