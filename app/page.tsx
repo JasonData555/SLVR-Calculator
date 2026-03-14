@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import Image from 'next/image';
 import InputPanel from '@/components/InputPanel';
 import ResultsPanel from '@/components/ResultsPanel';
+import FooterDisclosure from '@/components/blocks/FooterDisclosure';
 import { useSimulation } from '@/hooks/useSimulation';
 import type { SimulationInputs } from '@/lib/types';
 import { INPUT_DEFAULTS } from '@/lib/constants';
@@ -68,63 +69,7 @@ export default function Home() {
           <div className="lg:flex-1 lg:overflow-y-auto bg-[#F7F9FB]">
             <ResultsPanel result={result} isRunning={isRunning} inputs={inputs} />
 
-            {/* Footer */}
-            <footer className="border-t border-[#DDE3EC] bg-white px-8 py-5 mt-2">
-              <div className="flex flex-col sm:flex-row gap-6 justify-between max-w-4xl">
-                <div className="space-y-4 flex-1">
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
-                      Methodology
-                    </p>
-                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.6 }}>
-                      Cost projections are risk-weighted estimates based on industry benchmarks,
-                      regulatory data, and statistical modeling. These represent potential financial
-                      impacts derived from empirical data across 600+ global organizations.
-                      Calculations utilize Hitch Partners&rsquo; proprietary VRQM (Vacancy Risk
-                      Quantification Model) methodology to model exponential risk acceleration during
-                      leadership gaps. Individual organizational outcomes will vary based on specific
-                      risk factors and security posture.
-                    </p>
-                  </div>
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
-                      Data Sources
-                    </p>
-                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.6 }}>
-                      Industry breach data sourced from IBM Cost of Data Breach Report 2025,
-                      Cyentia Information Risk Insights Study (IRIS 2025) statistical analysis,
-                      and established cybersecurity industry standards. Security leader time-to-fill
-                      benchmarks sourced from IANS Research / Artico Search CISO Hiring Study.
-                      Hitch Partners placement timeline reflects verified internal search performance data.
-                    </p>
-                  </div>
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
-                      Disclaimer
-                    </p>
-                    <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.6 }}>
-                      These projections represent statistical estimates based on industry data,
-                      not guarantees of individual outcomes. Organizations should conduct their
-                      own risk assessment in consultation with qualified cybersecurity and legal
-                      professionals.
-                    </p>
-                  </div>
-                </div>
-                <div className="sm:text-right sm:shrink-0 sm:max-w-xs">
-                  <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#7A8FA6', marginBottom: '4px' }}>
-                    Citations
-                  </p>
-                  <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6', lineHeight: 1.8 }}>
-                    IBM Cost of Data Breach Report 2025&nbsp;·<br />
-                    Cyentia IRIS 2025&nbsp;·<br />
-                    IANS/Artico CISO Hiring Study
-                  </p>
-                  <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '10px', color: '#7A8FA6', marginTop: '16px', opacity: 0.7 }}>
-                    &copy; {new Date().getFullYear()} Hitch Partners · VRQM stochastic methodology
-                  </p>
-                </div>
-              </div>
-            </footer>
+            <FooterDisclosure />
           </div>
 
         </div>
