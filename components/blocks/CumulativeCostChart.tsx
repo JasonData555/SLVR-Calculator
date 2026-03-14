@@ -69,7 +69,6 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
   }));
 
   const showHitch  = daysVacant >= 62;
-  const showGen    = daysVacant >= 94;
   const showIndust = daysVacant >= 127;
 
   const gridColor  = '#EBF1F8';
@@ -91,7 +90,7 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
         </p>
       </div>
       <ResponsiveContainer width="100%" height={240}>
-        <AreaChart data={chartData} margin={{ top: 8, right: 20, left: 55, bottom: 10 }}>
+        <AreaChart data={chartData} margin={{ top: 40, right: 20, left: 55, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={gridColor} strokeOpacity={1} />
           <XAxis
             dataKey="day"
@@ -156,21 +155,6 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
               }}
             />
           )}
-          {showGen && (
-            <ReferenceLine
-              x={94}
-              stroke="#B45309"
-              strokeDasharray="5 4"
-              strokeWidth={1}
-              label={{
-                value: 'General Search ~94 days',
-                position: 'top',
-                fontSize: 10,
-                fill: '#B45309',
-                fontFamily: sansFont,
-              }}
-            />
-          )}
           {showIndust && (
             <ReferenceLine
               x={127}
@@ -200,11 +184,6 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
         {showHitch && (
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ display: 'inline-block', width: '16px', borderTop: '1px dashed #15803D' }} /> Hitch Partners
-          </span>
-        )}
-        {showGen && (
-          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ display: 'inline-block', width: '16px', borderTop: '1px dashed #B45309' }} /> General Search
           </span>
         )}
         {showIndust && (

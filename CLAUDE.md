@@ -6,7 +6,7 @@ Executive-grade lead-generation tool for Hitch Partners. Quantifies CISO/securit
 **Design direction:** Light institutional — McKinsey research report meets Bloomberg data density. Paper background (#F7F9FB), steel blue (#5B7C99) header bar is the only dark element. Authoritative, clinical, data-forward. Feels like it belongs in a board package.
 
 ## North Star Goal
-Translate a CISO vacancy into a credible dollar figure and demonstrate that Hitch Partners' faster placement (~62 days) delivers measurable ROI vs. industry average (~127 days).
+Translate a CISO vacancy into a credible dollar figure and demonstrate that Hitch Partners' faster placement (~62 days) delivers measurable ROI vs. industry typical (~127 days). The "Cost of Every Extra Day" table compares three search durations (Industry Typical, Hitch Partners, delta) — no General Search row.
 
 ## Stack
 - **Framework**: Next.js 16 (App Router), TypeScript
@@ -71,7 +71,7 @@ Translate a CISO vacancy into a credible dollar figure and demonstrate that Hitc
 | `components/InputPanel.tsx` | Left column — 10 inputs |
 | `components/ResultsPanel.tsx` | Right column — 3-section structure + slim status bar |
 | `components/blocks/HeroMetricStrip.tsx` | 48px DM Mono P50 figure, static risk badge, 90-day total |
-| `components/blocks/CumulativeCostChart.tsx` | Navy P50 line (2.5px), 10-tick X-axis, semantic reference lines (dynamic import) |
+| `components/blocks/CumulativeCostChart.tsx` | Navy P50 line (2.5px), 10-tick X-axis, two reference lines: Hitch Partners (Day 62, green) + Industry Typical (Day 127, red); top margin 40px for label visibility (dynamic import) |
 | `components/blocks/ScenarioRiskSummary.tsx` | Three-column P10/P50/P90 stat cards + gradient range bar (replaces HistogramChart) |
 | `components/PrintReport.tsx` | PDF export (light theme, separate print.css) |
 

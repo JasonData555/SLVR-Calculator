@@ -77,8 +77,7 @@ export default function SearchROICard({ result }: SearchROICardProps) {
 
       <div>
         <MetricRow label="Industry typical search (~127 days)" value={searchROI.industryExposure} />
-        <MetricRow label="General search firms (~94 days)" value={searchROI.generalExposure} />
-        <MetricRow label="Hitch Partners (~62 days)" value={searchROI.hitchExposure} isHitch />
+<MetricRow label="Hitch Partners (~62 days)" value={searchROI.hitchExposure} isHitch />
         <MetricRow label="Estimated risk reduction" value={searchROI.netRiskReduction} highlight />
       </div>
     </div>
