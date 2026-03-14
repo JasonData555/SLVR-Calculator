@@ -13,9 +13,10 @@ import CTASection from './blocks/CTASection';
 import PrintReport from './PrintReport';
 import type { SimulationOutput, SimulationInputs } from '@/lib/types';
 
+import ScenarioRiskSummary from './blocks/ScenarioRiskSummary';
+
 // Dynamic import for Recharts (no SSR)
 const CumulativeCostChart = dynamic(() => import('./blocks/CumulativeCostChart'), { ssr: false });
-const HistogramChart = dynamic(() => import('./blocks/HistogramChart'), { ssr: false });
 
 interface ResultsPanelProps {
   result: SimulationOutput | null;
@@ -190,12 +191,13 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
         </DataCard>
       )}
 
-      {/* Outcome distribution histogram */}
+      {/* Scenario Risk Summary */}
       {result && (
         <DataCard>
-          <HistogramChart
-            noBreachIterations={result.noBreach.iterations}
-            breachIterations={result.withBreach.iterations}
+          <ScenarioRiskSummary
+            p10Total={result.noBreach.p10Total}
+            p50Total={result.noBreach.p50Total}
+            p90Total={result.noBreach.p90Total}
           />
         </DataCard>
       )}

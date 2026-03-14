@@ -3,7 +3,7 @@
 ## Project Overview
 Executive-grade lead-generation tool for Hitch Partners. Quantifies CISO/security leader vacancy risk as a dollar figure. Pure client-side Next.js app — no backend.
 
-**Design direction:** Light institutional — McKinsey research report meets Bloomberg data density. Paper background (#F7F9FB), navy (#0F1729) header bar is the only dark element. Authoritative, clinical, data-forward. Feels like it belongs in a board package.
+**Design direction:** Light institutional — McKinsey research report meets Bloomberg data density. Paper background (#F7F9FB), steel blue (#5B7C99) header bar is the only dark element. Authoritative, clinical, data-forward. Feels like it belongs in a board package.
 
 ## North Star Goal
 Translate a CISO vacancy into a credible dollar figure and demonstrate that Hitch Partners' faster placement (~62 days) delivers measurable ROI vs. industry average (~127 days).
@@ -22,7 +22,8 @@ Translate a CISO vacancy into a credible dollar figure and demonstrate that Hitc
 **Color tokens (defined in `globals.css` `:root`):**
 | Token | Hex | Use |
 |---|---|---|
-| `--navy` | `#0F1729` | Header bar, heading text, slider/toggle on-state |
+| `--navy` | `#0F1729` | Heading text, slider/toggle on-state, chart lines, P50 figures |
+| `--steel` | `#5B7C99` | Header bar, primary buttons (hover: #4A6B88) |
 | `--navy-mid` | `#1E3A5F` | Subheadings, active states, hover states |
 | `--navy-light` | `#EBF1F8` | Callout backgrounds, stat card fills |
 | `--navy-faint` | `#F5F8FC` | Alternating fills, input panel background |
@@ -56,7 +57,7 @@ Translate a CISO vacancy into a credible dollar figure and demonstrate that Hitc
 
 ## Results Panel Structure (3 sections)
 1. **Executive Risk Summary** — `HeroMetricStrip` + `ScenarioCards`
-2. **Risk Decomposition** — `MonteCarloCallout` + `ComponentBreakdown` + charts
+2. **Risk Decomposition** — `MonteCarloCallout` + `ComponentBreakdown` + `CumulativeCostChart` + `ScenarioRiskSummary`
 3. **Accelerate the Search** — `SearchROICard` + `BreachWarning` + `CTASection`
 
 ## Key Files
@@ -70,7 +71,8 @@ Translate a CISO vacancy into a credible dollar figure and demonstrate that Hitc
 | `components/InputPanel.tsx` | Left column — 10 inputs |
 | `components/ResultsPanel.tsx` | Right column — 3-section structure + slim status bar |
 | `components/blocks/HeroMetricStrip.tsx` | 48px DM Mono P50 figure, static risk badge, 90-day total |
-| `components/blocks/CumulativeCostChart.tsx` | Navy P50 line, semantic reference lines (dynamic import) |
+| `components/blocks/CumulativeCostChart.tsx` | Navy P50 line (2.5px), 10-tick X-axis, semantic reference lines (dynamic import) |
+| `components/blocks/ScenarioRiskSummary.tsx` | Three-column P10/P50/P90 stat cards + gradient range bar (replaces HistogramChart) |
 | `components/PrintReport.tsx` | PDF export (light theme, separate print.css) |
 
 ## shadcn/ui Notes (base-ui variant)

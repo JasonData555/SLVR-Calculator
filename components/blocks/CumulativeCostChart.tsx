@@ -75,15 +75,19 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
   const gridColor  = '#EBF1F8';
   const axisColor  = '#7A8FA6';
   const monoFont   = 'var(--font-dm-mono)';
+  const sansFont   = 'var(--font-dm-sans)';
+
+  const interval = Math.ceil(daysVacant / 10);
+  const xTicks = Array.from({ length: 10 }, (_, i) => interval * (i + 1));
 
   return (
     <div>
       <div style={{ marginBottom: '16px' }}>
-        <h3 style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '12px', fontWeight: 500, color: '#1A2332' }}>
+        <h3 style={{ fontFamily: sansFont, fontSize: '12px', fontWeight: 500, color: '#1A2332' }}>
           Cumulative Vacancy Risk Over Time
         </h3>
-        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', color: '#7A8FA6', marginTop: '2px' }}>
-          Shaded band = 80% confidence interval · 5,000 simulations
+        <p style={{ fontFamily: sansFont, fontSize: '11px', fontStyle: 'italic', color: '#7A8FA6', marginTop: '2px' }}>
+          Shaded band = likely range across 5,000 simulations
         </p>
       </div>
       <ResponsiveContainer width="100%" height={240}>
@@ -91,13 +95,14 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
           <CartesianGrid strokeDasharray="3 3" stroke={gridColor} strokeOpacity={1} />
           <XAxis
             dataKey="day"
-            tick={{ fontSize: 10, fill: axisColor, fontFamily: monoFont }}
-            label={{ value: 'Days Vacant', position: 'insideBottom', offset: -5, fontSize: 10, fill: axisColor, fontFamily: monoFont }}
+            ticks={xTicks}
+            tick={{ fontSize: 11, fill: '#3D5068', fontFamily: monoFont }}
+            label={{ value: 'Days Vacant', position: 'insideBottom', offset: -5, fontSize: 11, fill: axisColor, fontFamily: sansFont }}
             stroke={gridColor}
           />
           <YAxis
             tickFormatter={formatYAxis}
-            tick={{ fontSize: 10, fill: axisColor, fontFamily: monoFont }}
+            tick={{ fontSize: 11, fill: '#3D5068', fontFamily: monoFont }}
             width={52}
             stroke={gridColor}
           />
@@ -109,7 +114,7 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
             dataKey="p90"
             stroke="none"
             fill="#0F1729"
-            fillOpacity={0.06}
+            fillOpacity={0.15}
             name="p90"
             legendType="none"
           />
@@ -128,7 +133,7 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
             type="monotone"
             dataKey="p50"
             stroke="#0F1729"
-            strokeWidth={2}
+            strokeWidth={2.5}
             fill="none"
             name="p50"
             dot={false}
@@ -143,11 +148,11 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
               strokeDasharray="5 4"
               strokeWidth={1}
               label={{
-                value: 'Hitch ~62d',
+                value: 'Hitch Partners ~62 days',
                 position: 'top',
-                fontSize: 9,
+                fontSize: 10,
                 fill: '#15803D',
-                fontFamily: 'var(--font-dm-sans)',
+                fontFamily: sansFont,
               }}
             />
           )}
@@ -158,11 +163,11 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
               strokeDasharray="5 4"
               strokeWidth={1}
               label={{
-                value: 'General ~94d',
+                value: 'General Search ~94 days',
                 position: 'top',
-                fontSize: 9,
+                fontSize: 10,
                 fill: '#B45309',
-                fontFamily: 'var(--font-dm-sans)',
+                fontFamily: sansFont,
               }}
             />
           )}
@@ -173,11 +178,11 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
               strokeDasharray="5 4"
               strokeWidth={1}
               label={{
-                value: 'Industry ~127d',
+                value: 'Industry Typical ~127 days',
                 position: 'top',
-                fontSize: 9,
+                fontSize: 10,
                 fill: '#B91C1C',
-                fontFamily: 'var(--font-dm-sans)',
+                fontFamily: sansFont,
               }}
             />
           )}
@@ -185,12 +190,12 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
       </ResponsiveContainer>
 
       {/* Legend */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '8px', fontFamily: 'var(--font-dm-sans)', fontSize: '10px', color: '#7A8FA6' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '8px', fontFamily: sansFont, fontSize: '11px', color: '#7A8FA6' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ display: 'inline-block', width: '16px', height: '2px', background: '#0F1729' }} /> P50 Median
+          <span style={{ display: 'inline-block', width: '16px', height: '2.5px', background: '#0F1729' }} /> P50 Median
         </span>
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ display: 'inline-block', width: '16px', height: '12px', background: 'rgba(15,23,41,0.06)', border: '1px solid rgba(15,23,41,0.12)', borderRadius: '2px' }} /> 80% CI
+          <span style={{ display: 'inline-block', width: '16px', height: '12px', background: 'rgba(15,23,41,0.15)', border: '1px solid rgba(15,23,41,0.20)', borderRadius: '2px' }} /> Likely Range
         </span>
         {showHitch && (
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
