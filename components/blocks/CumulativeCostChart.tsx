@@ -68,6 +68,9 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
     band: [d.p10, d.p90],
   }));
 
+  const lastP50 = chartData[chartData.length - 1]?.p50 ?? 0;
+  const yMax = lastP50 * 2.2;
+
   const showHitch  = daysVacant >= 62;
   const showIndust = daysVacant >= 127;
 
@@ -90,7 +93,7 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
         </p>
       </div>
       <ResponsiveContainer width="100%" height={240}>
-        <AreaChart data={chartData} margin={{ top: 40, right: 20, left: 55, bottom: 10 }}>
+        <AreaChart data={chartData} margin={{ top: 48, right: 20, left: 55, bottom: 10 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={gridColor} strokeOpacity={1} />
           <XAxis
             dataKey="day"
@@ -104,6 +107,7 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
             tick={{ fontSize: 11, fill: '#3D5068', fontFamily: monoFont }}
             width={52}
             stroke={gridColor}
+            domain={[0, yMax]}
           />
           <Tooltip content={<CustomTooltip />} />
 
@@ -113,7 +117,7 @@ export default function CumulativeCostChart({ data, daysVacant }: CumulativeCost
             dataKey="p90"
             stroke="none"
             fill="#0F1729"
-            fillOpacity={0.15}
+            fillOpacity={0.12}
             name="p90"
             legendType="none"
           />

@@ -39,6 +39,12 @@ const COMPONENT_LABELS: Record<string, (role: SecurityRole) => string> = {
     : 'Operational Impact',
 };
 
+function fmtPct(pct: number): string {
+  if (pct === 0) return '—';
+  if (pct < 1)   return `${pct.toFixed(1)}%`;
+  return `${Math.round(pct)}%`;
+}
+
 interface RowProps {
   label: string;
   value: number;
@@ -69,6 +75,7 @@ function Row({ label, value, pct, barColor, isLast }: RowProps) {
               borderRadius: '2px',
               background: barColor,
               width: `${Math.min(100, pct)}%`,
+              minWidth: '6px',
               transition: 'width 0.7s ease',
             }}
           />
@@ -79,7 +86,7 @@ function Row({ label, value, pct, barColor, isLast }: RowProps) {
           {fmt(value)}
         </span>
         <span style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '11px', color: '#7A8FA6', marginLeft: '6px', fontVariantNumeric: 'tabular-nums' }}>
-          {pct.toFixed(0)}%
+          {fmtPct(pct)}
         </span>
       </div>
     </div>

@@ -77,7 +77,7 @@ export default function HeroMetricStrip({ result, isRunning, daysVacant }: HeroM
             {fmt(noBreach.p50Daily)}
           </p>
           <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '12px', color: '#3D5068', marginTop: '8px', fontVariantNumeric: 'tabular-nums' }}>
-            80% CI&nbsp;&nbsp;{fmt(noBreach.p10Daily)}&thinsp;–&thinsp;{fmt(noBreach.p90Daily)} per day
+            Likely range&nbsp;&nbsp;{fmt(noBreach.p10Daily)}&thinsp;–&thinsp;{fmt(noBreach.p90Daily)} per day
           </p>
         </div>
 
