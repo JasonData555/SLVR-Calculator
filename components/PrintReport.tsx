@@ -17,7 +17,7 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
       year: 'numeric', month: 'long', day: 'numeric',
     });
 
-    const { noBreach, withBreach, riskLevel, componentBreakdown, searchROI, deterministicEstimate, monteCarloUplift } = result;
+    const { noBreach, withBreach, riskLevel, componentBreakdown, searchROI, deterministicEstimate, monteCarloUplift, controlInheritance: ci } = result;
 
     const riskClass = {
       Low: 'print-risk-low',
@@ -75,6 +75,8 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
                   ['Has Interim Leadership', inputs.hasInterim ? 'Yes' : 'No'],
                   ['Leadership Gap Severity', inputs.gapSeverity],
                   ['Breach Occurred', inputs.breachOccurred ? 'Yes' : 'No'],
+                  ['Vacancy Type', inputs.vacancyType === 'succession' ? 'Succession Vacancy' : 'Organizational Vacancy'],
+                  ...(inputs.vacancyType === 'succession' && inputs.maturity ? [['Security Maturity', inputs.maturity]] : []),
                 ].map(([label, value]) => (
                   <tr key={label}>
                     <td style={{ fontFamily: 'DM Sans, Arial, sans-serif', color: '#64748b' }}>{label}</td>
@@ -186,6 +188,43 @@ const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(
             </tr>
           </tbody>
         </table>
+
+        {/* Inherited Control Posture — succession vacancies only */}
+        {inputs.vacancyType === 'succession' && ci.isActive && (
+          <>
+            <h2>Inherited Control Posture</h2>
+            <table className="print-table">
+              <tbody>
+                <tr>
+                  <td style={{ color: '#64748b' }}>Vacancy Type</td>
+                  <td style={{ textAlign: 'right', color: '#0f172a' }}>Succession Vacancy</td>
+                </tr>
+                <tr>
+                  <td style={{ color: '#64748b' }}>Security Maturity at Vacancy</td>
+                  <td style={{ textAlign: 'right', color: '#0f172a' }}>{ci.maturity}</td>
+                </tr>
+                <tr>
+                  <td style={{ color: '#64748b' }}>Initial Control Discount</td>
+                  <td style={{ textAlign: 'right', color: '#0f172a' }}>{(ci.initialDiscount * 100).toFixed(0)}%</td>
+                </tr>
+                <tr>
+                  <td style={{ color: '#64748b' }}>Meaningful Protection Through</td>
+                  <td style={{ textAlign: 'right', color: '#0f172a' }}>Day {ci.cliffDay}</td>
+                </tr>
+                <tr>
+                  <td style={{ color: '#64748b' }}>Daily Risk Reduction at Vacancy Start</td>
+                  <td style={{ textAlign: 'right', color: '#16a34a' }}>{fmt(ci.dailySavingAtDay1)}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p style={{ fontSize: '8pt', color: ci.cliffDay != null && ci.cliffDay > inputs.daysVacant ? '#15803D' : '#B91C1C', marginBottom: '10pt' }}>
+              {ci.cliffDay != null && ci.cliffDay > inputs.daysVacant
+                ? `Inherited controls provide meaningful protection through the full ${inputs.daysVacant}-day vacancy window. Risk is reduced by ${(ci.discountAtDay1 * 100).toFixed(1)}% compared to an organization with no prior security program.`
+                : `At ${inputs.daysVacant} days, inherited controls provide meaningful protection only through Day ${ci.cliffDay}. After that, risk converges with an organization that had no prior security program. Accelerating the search reduces exposure by ${fmt(ci.dailySavingAtDay1 * Math.max(0, inputs.daysVacant - (ci.cliffDay ?? 0)))}.`
+              }
+            </p>
+          </>
+        )}
 
         {/* Search ROI */}
         <h2>Search ROI Comparison</h2>

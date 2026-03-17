@@ -7,6 +7,7 @@ import HeroMetricStrip from './blocks/HeroMetricStrip';
 import ScenarioCards from './blocks/ScenarioCards';
 import MonteCarloCallout from './blocks/MonteCarloCallout';
 import ComponentBreakdown from './blocks/ComponentBreakdown';
+import ControlInheritancePanel from './blocks/ControlInheritancePanel';
 import SearchROICard from './blocks/SearchROICard';
 import BreachWarning from './blocks/BreachWarning';
 import CTASection from './blocks/CTASection';
@@ -135,7 +136,12 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
       <SectionDivider label="Executive Risk Summary" />
 
       {/* Hero metric — P50 daily cost, risk level, total exposure */}
-      <HeroMetricStrip result={result} isRunning={isRunning} daysVacant={inputs.daysVacant} />
+      <HeroMetricStrip
+        result={result}
+        isRunning={isRunning}
+        daysVacant={inputs.daysVacant}
+        controlInheritance={result?.controlInheritance}
+      />
 
       {/* Scenario comparison cards */}
       <div>
@@ -165,12 +171,24 @@ export default function ResultsPanel({ result, isRunning, inputs }: ResultsPanel
         <ComponentBreakdown result={result} role={inputs.role} />
       </DataCard>
 
+      {/* Control Inheritance Panel — succession vacancies only */}
+      {result && result.controlInheritance.isActive && (
+        <ControlInheritancePanel
+          controlInheritance={result.controlInheritance}
+          daysVacant={inputs.daysVacant}
+        />
+      )}
+
       {/* Cumulative cost over time */}
       {result ? (
         <DataCard>
           <CumulativeCostChart
             data={result.noBreach.cumulativeByDay}
             daysVacant={inputs.daysVacant}
+            baselineData={result.controlInheritance.isActive ? result.cumulativeByDayBaseline : undefined}
+            cliffDay={result.controlInheritance.cliffDay}
+            maturity={inputs.maturity}
+            vacancyType={inputs.vacancyType}
           />
         </DataCard>
       ) : (

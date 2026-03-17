@@ -101,6 +101,15 @@ const CORR = [
   [0.0,  0.42, 1.0 ],
 ];
 
+// Control Inheritance: decay constants per security maturity level
+const CONTROL_INHERITANCE = {
+  Advanced: { initialDiscount: 0.35, lambda: 0.008 },
+  High:     { initialDiscount: 0.25, lambda: 0.012 },
+  Medium:   { initialDiscount: 0.15, lambda: 0.018 },
+  Low:      { initialDiscount: 0.05, lambda: 0.025 },
+};
+const MEANINGFUL_PROTECTION_THRESHOLD = 0.10;
+
 // ============================================================
 // MATH UTILITIES
 // ============================================================
@@ -209,8 +218,21 @@ function choleskyDecompose(A) {
 // DERIVED FACTORS (deterministic — same spec formulas)
 // ============================================================
 
-function vacancyRiskMultiplier(daysVacant, hasInterim) {
-  return 1.0
+/**
+ * Returns the control inheritance discount at a given day.
+ * Exponential decay: initialDiscount × e^(-lambda × daysVacant)
+ * Returns 0 for organizational vacancies (no inherited program).
+ */
+function getControlInheritanceDiscount(vacancyType, maturity, daysVacant) {
+  if (vacancyType === 'organizational' || !maturity) return 0;
+  const params = CONTROL_INHERITANCE[maturity];
+  if (!params) return 0;
+  return params.initialDiscount * Math.exp(-params.lambda * daysVacant);
+}
+
+function vacancyRiskMultiplier(daysVacant, hasInterim, vacancyType, maturity) {
+  const controlDiscount = getControlInheritanceDiscount(vacancyType, maturity, daysVacant);
+  return (1.0 - controlDiscount)
     + 0.20 * Math.log(1.0 + daysVacant / 30.0)
     - (hasInterim ? 0.40 : 0.0);
 }
@@ -260,11 +282,12 @@ function mean(arr) {
 
 function computeDeterministic(params) {
   const { industry, role, revenueMillions, teamSize, daysVacant,
-          hasInterim, gapSeverity, regulatoryEnvironment } = params;
+          hasInterim, gapSeverity, regulatoryEnvironment,
+          vacancyType, maturity } = params;
 
   const ind      = INDUSTRY_DATA[industry];
   const rw       = ROLE_RISK_WEIGHTS[role];
-  const vrm      = vacancyRiskMultiplier(daysVacant, hasInterim);
+  const vrm      = vacancyRiskMultiplier(daysVacant, hasInterim, vacancyType, maturity);
   const csf      = companySizeFactor(revenueMillions);
   const dBudg    = dailySecurityBudget(revenueMillions);
   const tMult    = teamSizeMultiplier(teamSize);
@@ -364,6 +387,7 @@ self.onmessage = function (e) {
   const {
     industry, role, revenueMillions, teamSize,
     daysVacant, hasInterim, gapSeverity, regulatoryEnvironment,
+    vacancyType, maturity,
   } = params;
 
   // Pre-compute deterministic factors (once)
@@ -373,7 +397,7 @@ self.onmessage = function (e) {
   const lnP              = LOGNORMAL_PARAMS[industry];
   const regP             = REGULATORY_PENALTY_PARAMS[industry];
   const rw               = ROLE_RISK_WEIGHTS[role];
-  const vrm              = vacancyRiskMultiplier(daysVacant, hasInterim);
+  const vrm              = vacancyRiskMultiplier(daysVacant, hasInterim, vacancyType, maturity);
   const csf              = companySizeFactor(revenueMillions);
   const dBudg            = dailySecurityBudget(revenueMillions);
   const tMult            = teamSizeMultiplier(teamSize);
@@ -422,13 +446,27 @@ self.onmessage = function (e) {
   const cumulativeByDay = [];
   for (let i = 1; i <= maxChartPoints; i++) {
     const d = Math.round(i * step);
-    const vrmD = vacancyRiskMultiplier(d, hasInterim);
+    const vrmD = vacancyRiskMultiplier(d, hasInterim, vacancyType, maturity);
     const scale = vrmD / vrmFull;
     cumulativeByDay.push({
       day: d,
       p10: p10Daily * scale * d,
       p50: p50Daily * scale * d,
       p90: p90Daily * scale * d,
+    });
+  }
+
+  // Build cumulativeByDayBaseline: organizational VRM (no control inheritance discount)
+  // Used as the "without inherited controls" comparison line in the chart.
+  const cumulativeByDayBaseline = [];
+  for (let i = 1; i <= maxChartPoints; i++) {
+    const d = Math.round(i * step);
+    const vrmOrgD = vacancyRiskMultiplier(d, hasInterim, 'organizational', null);
+    cumulativeByDayBaseline.push({
+      day: d,
+      p10: p10Daily * (vrmOrgD / vrmFull) * d,
+      p50: p50Daily * (vrmOrgD / vrmFull) * d,
+      p90: p90Daily * (vrmOrgD / vrmFull) * d,
     });
   }
 
@@ -475,6 +513,42 @@ self.onmessage = function (e) {
     operational: mean(nbOpComp),
   };
 
+  // Control Inheritance output
+  const ciIsActive = vacancyType === 'succession' && !!maturity;
+  const ciParams = ciIsActive ? CONTROL_INHERITANCE[maturity] : { initialDiscount: 0, lambda: 0 };
+
+  function ciDiscount(d) {
+    return getControlInheritanceDiscount(vacancyType, maturity, d);
+  }
+  // dailySaving: p50Daily × discount_at_day / vrmFull
+  // (consistent with how cumulativeByDay uses VRM ratios)
+  function ciSaving(d) {
+    return p50Daily * ciDiscount(d) / (vrmFull || 1);
+  }
+
+  const ciCliffDay = ciIsActive
+    ? Math.round(
+        -Math.log(MEANINGFUL_PROTECTION_THRESHOLD / ciParams.initialDiscount)
+        / ciParams.lambda
+      )
+    : null;
+
+  const controlInheritance = {
+    vacancyType,
+    maturity: maturity || null,
+    initialDiscount: ciParams.initialDiscount,
+    cliffDay: ciCliffDay,
+    discountAtDay1:  ciDiscount(1),
+    discountAtDay30: ciDiscount(30),
+    discountAtDay60: ciDiscount(60),
+    discountAtDay90: ciDiscount(90),
+    dailySavingAtDay1:  ciSaving(1),
+    dailySavingAtDay30: ciSaving(30),
+    dailySavingAtDay60: ciSaving(60),
+    dailySavingAtDay90: ciSaving(90),
+    isActive: ciIsActive,
+  };
+
   self.postMessage({
     noBreach: {
       p10Daily, p50Daily, p90Daily,
@@ -503,5 +577,7 @@ self.onmessage = function (e) {
       roiRatio,
     },
     componentBreakdown,
+    controlInheritance,
+    cumulativeByDayBaseline,
   });
 };

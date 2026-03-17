@@ -29,6 +29,8 @@ export type RiskLevel = 'Low' | 'Medium' | 'High';
 export type GapSeverity = 'Low' | 'Medium' | 'High';
 export type RegulatoryEnvironment = 'Low' | 'Medium' | 'High' | 'Critical';
 export type CompanySizeTier = 'small' | 'medium' | 'large' | 'enterprise';
+export type VacancyType = 'succession' | 'organizational';
+export type SecurityMaturity = 'Advanced' | 'High' | 'Medium' | 'Low';
 
 // ——— Simulation Inputs ———————————————————————————————————————
 export interface SimulationInputs {
@@ -42,6 +44,8 @@ export interface SimulationInputs {
   hasInterim: boolean;
   gapSeverity: GapSeverity;
   breachOccurred: boolean;
+  vacancyType: VacancyType;    // succession = inherited program; organizational = no prior program
+  maturity: SecurityMaturity | null; // null when vacancyType = 'organizational'
 }
 
 // ——— Worker I/O —————————————————————————————————————————————
@@ -83,6 +87,22 @@ export interface ComponentBreakdown {
   operational: number;
 }
 
+export interface ControlInheritanceOutput {
+  vacancyType: VacancyType;
+  maturity: SecurityMaturity | null;
+  initialDiscount: number;
+  cliffDay: number | null;
+  discountAtDay1: number;
+  discountAtDay30: number;
+  discountAtDay60: number;
+  discountAtDay90: number;
+  dailySavingAtDay1: number;
+  dailySavingAtDay30: number;
+  dailySavingAtDay60: number;
+  dailySavingAtDay90: number;
+  isActive: boolean;
+}
+
 export interface SimulationOutput {
   noBreach: ScenarioResult;
   withBreach: ScenarioResult;
@@ -91,4 +111,6 @@ export interface SimulationOutput {
   riskLevel: RiskLevel;
   searchROI: SearchROI;
   componentBreakdown: ComponentBreakdown;  // P50 daily per component (no-breach)
+  controlInheritance: ControlInheritanceOutput;
+  cumulativeByDayBaseline: CumulativeDataPoint[]; // organizational baseline for chart
 }

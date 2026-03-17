@@ -7,7 +7,7 @@ import {
 import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import type { SimulationInputs, Industry, SecurityRole, GapSeverity, RegulatoryEnvironment } from '@/lib/types';
+import type { SimulationInputs, Industry, SecurityRole, GapSeverity, RegulatoryEnvironment, VacancyType, SecurityMaturity } from '@/lib/types';
 import {
   INDUSTRIES, ROLES, SLIDER_RANGES, GAP_SEVERITY_HELPER,
 } from '@/lib/constants';
@@ -203,6 +203,141 @@ function ToggleRow({
   );
 }
 
+// ——— Vacancy Type toggle (two pill buttons) ——————————————————
+const VACANCY_HELPER: Record<VacancyType, string> = {
+  succession: 'A prior CISO or security leader was in place. Inherited controls reduce initial risk exposure.',
+  organizational: 'No prior security program to inherit. Full industry risk applies from Day 1.',
+};
+
+function VacancyTypeToggle({
+  value,
+  onChange,
+}: {
+  value: VacancyType;
+  onChange: (v: VacancyType) => void;
+}) {
+  const btnBase: React.CSSProperties = {
+    flex: 1,
+    height: '32px',
+    border: '1px solid #DDE3EC',
+    borderRadius: '4px',
+    fontFamily: 'var(--font-dm-sans)',
+    fontSize: '11px',
+    cursor: 'pointer',
+    transition: 'all 150ms ease',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+  const selected: React.CSSProperties = {
+    ...btnBase,
+    background: '#0F1729',
+    borderColor: '#0F1729',
+    color: '#FFFFFF',
+    fontWeight: 500,
+  };
+  const unselected: React.CSSProperties = {
+    ...btnBase,
+    background: '#FFFFFF',
+    color: '#7A8FA6',
+  };
+
+  return (
+    <div className="space-y-1.5">
+      <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: 500, color: '#3D5068', marginBottom: '6px' }}>
+        Vacancy Type
+      </p>
+      <div style={{ display: 'flex', gap: '6px' }}>
+        <button
+          type="button"
+          style={value === 'succession' ? selected : unselected}
+          onClick={() => onChange('succession')}
+        >
+          Succession Vacancy
+        </button>
+        <button
+          type="button"
+          style={value === 'organizational' ? selected : unselected}
+          onClick={() => onChange('organizational')}
+        >
+          Organizational Vacancy
+        </button>
+      </div>
+      <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', fontStyle: 'italic', color: '#7A8FA6', lineHeight: 1.4, marginTop: '4px' }}>
+        {VACANCY_HELPER[value]}
+      </p>
+    </div>
+  );
+}
+
+// ——— Security Maturity select (animated show/hide) ————————————
+const MATURITY_OPTIONS: SecurityMaturity[] = ['Advanced', 'High', 'Medium', 'Low'];
+const MATURITY_DESCRIPTIONS: Record<SecurityMaturity, string> = {
+  Advanced: 'Advanced — Industry-leading controls & team depth',
+  High:     'High — Mature controls and documented processes',
+  Medium:   'Medium — Basic controls, partially documented',
+  Low:      'Low — Minimal formal controls, reactive posture',
+};
+
+function SecurityMaturitySelect({
+  value,
+  vacancyType,
+  onChange,
+}: {
+  value: SecurityMaturity | null;
+  vacancyType: VacancyType;
+  onChange: (v: SecurityMaturity) => void;
+}) {
+  const isVisible = vacancyType === 'succession';
+  return (
+    <div style={{
+      maxHeight: isVisible ? '160px' : '0',
+      overflow: 'hidden',
+      transition: 'max-height 200ms ease',
+    }}>
+      <div className="space-y-1.5" style={{ paddingTop: '4px' }}>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '11px', fontWeight: 500, color: '#3D5068', marginBottom: '6px' }}>
+          Security Maturity at Vacancy
+        </p>
+        <Select
+          value={value ?? 'High'}
+          onValueChange={(v) => { if (v !== null) onChange(v as SecurityMaturity); }}
+        >
+          <SelectTrigger
+            className="w-full focus:outline-none transition-colors"
+            style={{
+              border: '1px solid #DDE3EC',
+              borderRadius: '4px',
+              background: '#FFFFFF',
+              fontFamily: 'var(--font-dm-sans)',
+              fontSize: '13px',
+              color: '#1A2332',
+              height: '36px',
+            }}
+          >
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent style={{ background: '#FFFFFF', border: '1px solid #DDE3EC', borderRadius: '4px' }}>
+            {MATURITY_OPTIONS.map((opt) => (
+              <SelectItem
+                key={opt}
+                value={opt}
+                style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '13px', color: '#1A2332' }}
+                className="focus:bg-[#EBF1F8] focus:text-[#1A2332] data-[highlighted]:bg-[#EBF1F8]"
+              >
+                {MATURITY_DESCRIPTIONS[opt]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', fontStyle: 'italic', color: '#7A8FA6', lineHeight: 1.4, marginTop: '4px' }}>
+          Reflects the state of controls, processes, and team capability when the position became vacant.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 // ——— Main InputPanel ——————————————————————————————————————————
 export default function InputPanel({ inputs, onChange }: InputPanelProps) {
   return (
@@ -277,6 +412,21 @@ export default function InputPanel({ inputs, onChange }: InputPanelProps) {
             max={SLIDER_RANGES.daysVacant.max}
             suffix=" days"
             onChange={(v) => onChange('daysVacant', v)}
+          />
+
+          <VacancyTypeToggle
+            value={inputs.vacancyType}
+            onChange={(v) => {
+              onChange('vacancyType', v);
+              if (v === 'organizational') onChange('maturity', null);
+              else if (!inputs.maturity) onChange('maturity', 'High');
+            }}
+          />
+
+          <SecurityMaturitySelect
+            value={inputs.maturity}
+            vacancyType={inputs.vacancyType}
+            onChange={(v) => onChange('maturity', v)}
           />
 
           <ToggleRow

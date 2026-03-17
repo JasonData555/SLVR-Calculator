@@ -1,12 +1,13 @@
 'use client';
 
-import type { SimulationOutput, RiskLevel } from '@/lib/types';
+import type { SimulationOutput, RiskLevel, ControlInheritanceOutput } from '@/lib/types';
 import { fmt, fmtCompact } from '@/lib/formatters';
 
 interface HeroMetricStripProps {
   result: SimulationOutput | null;
   isRunning: boolean;
   daysVacant: number;
+  controlInheritance?: ControlInheritanceOutput;
 }
 
 const RISK_CONFIG: Record<RiskLevel, {
@@ -35,7 +36,7 @@ const RISK_CONFIG: Record<RiskLevel, {
   },
 };
 
-export default function HeroMetricStrip({ result, isRunning, daysVacant }: HeroMetricStripProps) {
+export default function HeroMetricStrip({ result, isRunning, daysVacant, controlInheritance }: HeroMetricStripProps) {
   if (isRunning || !result) {
     return (
       <div style={{ background: '#FFFFFF', border: '1px solid #DDE3EC', borderRadius: '6px', padding: '24px 28px' }}
@@ -79,6 +80,12 @@ export default function HeroMetricStrip({ result, isRunning, daysVacant }: HeroM
           <p style={{ fontFamily: 'var(--font-dm-mono)', fontSize: '12px', color: '#3D5068', marginTop: '8px', fontVariantNumeric: 'tabular-nums' }}>
             Likely range&nbsp;&nbsp;{fmt(noBreach.p10Daily)}&thinsp;–&thinsp;{fmt(noBreach.p90Daily)} per day
           </p>
+          {controlInheritance?.isActive && (
+            <p style={{ fontFamily: 'var(--font-dm-sans)', fontSize: '10px', fontStyle: 'italic', color: '#15803D', marginTop: '4px' }}>
+              Inherited control discount: −{(controlInheritance.discountAtDay1 * 100).toFixed(1)}% (Day 1)
+              &nbsp;·&nbsp;Threshold at Day {controlInheritance.cliffDay}
+            </p>
+          )}
         </div>
 
         {/* Right: risk badge + total exposure — 40% */}

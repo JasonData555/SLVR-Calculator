@@ -9,6 +9,8 @@ import type {
   GapSeverity,
   RegulatoryEnvironment,
   CompanySizeTier,
+  VacancyType,
+  SecurityMaturity,
 } from './types';
 
 // ——— Industry Core Data ——————————————————————————————————————
@@ -220,18 +222,20 @@ export const SIZE_TIER_BOUNDARIES = {
 } as const;
 
 // ——— Input Defaults ———————————————————————————————————————————
-export const INPUT_DEFAULTS = {
+export const INPUT_DEFAULTS: import('./types').SimulationInputs = {
   industry:               'Healthcare' as Industry,
   role:                   'CISO' as SecurityRole,
   revenueMillions:        500,
   employees:              2_500,
   teamSize:               12,
-  regulatoryEnvironment:  'Medium' as const,
+  regulatoryEnvironment:  'Medium' as RegulatoryEnvironment,
   daysVacant:             90,
   hasInterim:             false,
-  gapSeverity:            'Medium' as const,
+  gapSeverity:            'Medium' as GapSeverity,
   breachOccurred:         false,
-} as const;
+  vacancyType:            'succession' as VacancyType,
+  maturity:               'High' as SecurityMaturity,
+};
 
 // ——— Slider Ranges ————————————————————————————————————————————
 export const SLIDER_RANGES = {
