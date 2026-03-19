@@ -1,7 +1,7 @@
 'use client';
 
 import {
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip,
+  Area, XAxis, YAxis, CartesianGrid, Tooltip,
   ReferenceLine, ResponsiveContainer, Line, ComposedChart,
 } from 'recharts';
 import type { CumulativeDataPoint, VacancyType } from '@/lib/types';
@@ -56,13 +56,27 @@ function CustomTooltip({
         Day {label}
       </p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', fontFamily: 'var(--font-dm-mono)', fontSize: '11px' }}>
-        <p style={{ color: '#7A8FA6' }}>P10: <span style={{ color: '#1A2332', fontWeight: 500 }}>{fmt(p10)}</span></p>
-        <p style={{ color: '#0F1729', fontWeight: 500 }}>P50: <span>{fmt(p50)}</span></p>
-        <p style={{ color: '#7A8FA6' }}>P90: <span style={{ color: '#1A2332', fontWeight: 500 }}>{fmt(p90)}</span></p>
-        {p50Base !== undefined && vacancyType === 'succession' && (
-          <p style={{ color: '#B91C1C', borderTop: '1px solid #EBF1F8', paddingTop: '4px', marginTop: '2px' }}>
-            No program: <span style={{ fontWeight: 500 }}>{fmt(p50Base)}</span>
-          </p>
+        {p50Base !== undefined && vacancyType === 'succession' ? (
+          <>
+            <p style={{ color: '#0F1729', fontWeight: 500 }}>
+              Your profile: <span>{fmt(p50)}</span>
+            </p>
+            <p style={{ color: '#B91C1C' }}>
+              Without controls: <span style={{ fontWeight: 500 }}>{fmt(p50Base)}</span>
+            </p>
+            <p style={{ color: '#15803D', fontWeight: 600, borderTop: '1px solid #EBF1F8', paddingTop: '4px', marginTop: '2px' }}>
+              Controls saving: <span>{fmt(Math.max(0, p50Base - p50))}</span>
+            </p>
+            <p style={{ color: '#7A8FA6', borderTop: '1px solid #EBF1F8', paddingTop: '4px', marginTop: '2px' }}>
+              Range: <span style={{ color: '#1A2332' }}>{fmt(p10)} – {fmt(p90)}</span>
+            </p>
+          </>
+        ) : (
+          <>
+            <p style={{ color: '#7A8FA6' }}>P10: <span style={{ color: '#1A2332', fontWeight: 500 }}>{fmt(p10)}</span></p>
+            <p style={{ color: '#0F1729', fontWeight: 500 }}>P50: <span>{fmt(p50)}</span></p>
+            <p style={{ color: '#7A8FA6' }}>P90: <span style={{ color: '#1A2332', fontWeight: 500 }}>{fmt(p90)}</span></p>
+          </>
         )}
       </div>
     </div>
@@ -92,8 +106,11 @@ export default function CumulativeCostChart({
     p50: d.p50,
     p10: d.p10,
     p90: d.p90,
-    band: [d.p10, d.p90],
-    ...(showBaseline ? { p50Base: baselineMap.get(d.day) ?? d.p50 } : {}),
+    ...(showBaseline ? {
+      p50Base: baselineMap.get(d.day) ?? d.p50,
+      controlsSaving: Math.max(0, (baselineMap.get(d.day) ?? d.p50) - d.p50),
+      p50stack: d.p50,
+    } : {}),
   }));
 
   // yMax should accommodate baseline line
@@ -116,7 +133,7 @@ export default function CumulativeCostChart({
   const xTicks = Array.from({ length: 10 }, (_, i) => interval * (i + 1));
 
   const subtitle = showBaseline
-    ? 'Shaded band = likely range · Lower line reflects inherited control posture discount'
+    ? 'Shaded band = likely range · Green area = cumulative savings from inherited controls'
     : 'Shaded band = likely range across 5,000 simulations';
 
   const p50Label = showBaseline && maturity
@@ -152,6 +169,32 @@ export default function CumulativeCostChart({
           />
           <Tooltip content={<CustomTooltip vacancyType={vacancyType} />} />
 
+          {/* Green savings fill — stacked p50 (transparent base) + controlsSaving (green cap) */}
+          {showBaseline && (
+            <>
+              <Area
+                type="monotone"
+                dataKey="p50stack"
+                stackId="savings"
+                stroke="none"
+                fill="transparent"
+                fillOpacity={0}
+                legendType="none"
+                name="__savings_base__"
+              />
+              <Area
+                type="monotone"
+                dataKey="controlsSaving"
+                stackId="savings"
+                stroke="none"
+                fill="#15803D"
+                fillOpacity={0.08}
+                legendType="none"
+                name="controlsSaving"
+              />
+            </>
+          )}
+
           {/* P10–P90 confidence band — subtle navy wash */}
           <Area
             type="monotone"
@@ -177,7 +220,7 @@ export default function CumulativeCostChart({
             type="monotone"
             dataKey="p50"
             stroke="#0F1729"
-            strokeWidth={2.5}
+            strokeWidth={3}
             fill="none"
             name="p50"
             dot={false}
@@ -190,8 +233,9 @@ export default function CumulativeCostChart({
               type="monotone"
               dataKey="p50Base"
               stroke="#B91C1C"
-              strokeWidth={1.5}
-              strokeDasharray="4 3"
+              strokeWidth={2}
+              strokeDasharray="8 4"
+              strokeOpacity={0.80}
               dot={false}
               name="p50Base"
               activeDot={{ r: 3, fill: '#B91C1C', stroke: '#FFFFFF', strokeWidth: 2 }}
@@ -252,11 +296,16 @@ export default function CumulativeCostChart({
       {/* Legend */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', marginTop: '8px', fontFamily: sansFont, fontSize: '11px', color: '#7A8FA6' }}>
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ display: 'inline-block', width: '16px', height: '2.5px', background: '#0F1729' }} /> {p50Label}
+          <span style={{ display: 'inline-block', width: '16px', height: '3px', background: '#0F1729' }} /> {p50Label}
         </span>
         {showBaseline && (
           <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ display: 'inline-block', width: '16px', borderTop: '1.5px dashed #B91C1C' }} /> Without inherited controls
+            <span style={{ display: 'inline-block', width: '16px', borderTop: '2px dashed #B91C1C', opacity: 0.80 }} /> Without inherited controls
+          </span>
+        )}
+        {showBaseline && (
+          <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ display: 'inline-block', width: '16px', height: '10px', background: 'rgba(21,128,61,0.15)', border: '1px solid rgba(21,128,61,0.25)', borderRadius: '2px' }} /> Controls saving
           </span>
         )}
         <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>

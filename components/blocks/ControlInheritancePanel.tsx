@@ -74,10 +74,10 @@ export default function ControlInheritancePanel({
               Today (Day 1)
             </p>
             <p style={{ fontFamily: monoFont, fontSize: '22px', fontWeight: 500, color: '#15803D', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
-              −{pct(ci.discountAtDay1)}
+              {pct(ci.discountAtDay1)} reduction
             </p>
             <p style={{ fontFamily: monoFont, fontSize: '11px', color: '#15803D', marginTop: '4px', fontVariantNumeric: 'tabular-nums' }}>
-              −{fmt(ci.dailySavingAtDay1)} vs. no program
+              {fmt(ci.dailySavingAtDay1)} saved vs. no program
             </p>
             <p style={{ fontFamily: sansFont, fontSize: '10px', fontStyle: 'italic', color: '#7A8FA6', marginTop: '6px', lineHeight: 1.4 }}>
               Daily risk reduction from inherited controls
@@ -90,10 +90,10 @@ export default function ControlInheritancePanel({
               Day 30
             </p>
             <p style={{ fontFamily: monoFont, fontSize: '22px', fontWeight: 500, color: '#3D5068', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
-              −{pct(ci.discountAtDay30)}
+              {pct(ci.discountAtDay30)} reduction
             </p>
             <p style={{ fontFamily: monoFont, fontSize: '11px', color: '#3D5068', marginTop: '4px', fontVariantNumeric: 'tabular-nums' }}>
-              −{fmt(ci.dailySavingAtDay30)} vs. no program
+              {fmt(ci.dailySavingAtDay30)} saved vs. no program
             </p>
             <p style={{ fontFamily: sansFont, fontSize: '10px', fontStyle: 'italic', color: '#7A8FA6', marginTop: '6px', lineHeight: 1.4 }}>
               Controls beginning to degrade without leadership
@@ -103,13 +103,13 @@ export default function ControlInheritancePanel({
           {/* Card C — PROTECTION THRESHOLD */}
           <div style={{ paddingLeft: '16px', background: '#FEF9F9', borderRadius: '0 4px 4px 0', padding: '0 0 0 16px' }}>
             <p style={{ fontFamily: sansFont, fontSize: '9px', fontWeight: 600, letterSpacing: '0.10em', textTransform: 'uppercase', color: '#B91C1C', marginBottom: '6px' }}>
-              Protection Threshold · Day {cliffDay}
+              Protection Threshold
             </p>
             <p style={{ fontFamily: monoFont, fontSize: '22px', fontWeight: 500, color: '#B91C1C', lineHeight: 1 }}>
-              {'< 10%'}
+              Day {cliffDay}
             </p>
             <p style={{ fontFamily: sansFont, fontSize: '10px', fontStyle: 'italic', color: '#B91C1C', marginTop: '10px', lineHeight: 1.4 }}>
-              Inherited controls no longer materially reduce risk
+              Inherited controls provide meaningful protection through this day
             </p>
           </div>
         </div>
@@ -169,10 +169,10 @@ export default function ControlInheritancePanel({
           {/* End labels */}
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '24px' }}>
             <p style={{ fontFamily: monoFont, fontSize: '9px', color: '#15803D' }}>
-              {pct(ci.initialDiscount)} at vacancy start
+              Full protection at Day 1 ({pct(ci.initialDiscount)} discount)
             </p>
             <p style={{ fontFamily: monoFont, fontSize: '9px', color: '#B91C1C' }}>
-              &lt;10% at Day {cliffDay}
+              Threshold reached at Day {cliffDay}
             </p>
           </div>
         </div>
@@ -194,10 +194,11 @@ export default function ControlInheritancePanel({
             Risk is reduced by {pct(ci.discountAtDay1)} compared to an equivalent organization with no prior security program.
           </p>
         ) : (
-          <p style={{ fontFamily: sansFont, fontSize: '11px', color: '#B91C1C', lineHeight: 1.5 }}>
+          <p style={{ fontFamily: sansFont, fontSize: '11px', color: '#1A2332', lineHeight: 1.5 }}>
             At your current {daysVacant}-day vacancy duration, inherited controls will provide meaningful protection
             only through Day {cliffDay}. After that, risk converges with an organization that had no prior security
-            program. Accelerating the search reduces exposure by {fmt(deltaCost)}.
+            program. Accelerating the search reduces exposure by{' '}
+            <span style={{ color: '#B91C1C', fontWeight: 600 }}>{fmt(deltaCost)}</span>.
           </p>
         )}
       </div>
